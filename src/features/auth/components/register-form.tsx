@@ -63,7 +63,7 @@ export function RegisterForm() {
     );
   }
 
-  if (registrationStatus && !registrationStatus.registrationOpen) {
+  if (registrationStatus ) {
     return (
       <Card className="w-full max-w-md">
         <CardHeader>

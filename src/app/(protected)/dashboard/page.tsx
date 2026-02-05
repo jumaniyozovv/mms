@@ -1,10 +1,11 @@
     "use client";
 
-    import { useAuth } from "@/shared/providers/AuthProvider";
+import { useAuth } from "@/shared/providers/AuthProvider";
+
+
 
     export default function Dashboard() {
-      const { user, isLoading, logout } = useAuth();
-
+      const {isLoading} = useAuth()
       if (isLoading) {
         return (
           <div className="flex min-h-screen items-center justify-center">
@@ -14,7 +15,7 @@
       }
 
       return (
-        <div className="h-full w-full bg-gray-500">
+        <div className="h-full w-full">
 aaaaaaaaaaaa
         </div>
       );

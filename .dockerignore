@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+.env*
+dump.rdb
+.pnpm-approve-builds.json
+tsconfig.tsbuildinfo

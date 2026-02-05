@@ -12,7 +12,6 @@ import {
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -30,10 +29,22 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/shared/providers/AuthProvider"
+import { useLogout } from "@/features/auth/hooks"
+import { useRouter } from "next/navigation"
+import { clearAccessToken } from "@/shared/lib"
 
 export function NavUser() {
   const { isMobile } = useSidebar()
-  const { user,logout, isLoading:isLoggingOut } = useAuth()
+  const { user, isLoading: isLoggingOut } = useAuth()
+  const { mutate: logout } = useLogout()
+  const router = useRouter()
+
+  const handlLogout = () => {
+    logout(undefined,
+      { onSettled: () => router.push("/login") })
+
+      clearAccessToken()
+  }
 
   return (
     <SidebarMenu>
@@ -88,7 +99,7 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => logout()}
+              onClick={handlLogout}
               disabled={isLoggingOut}
             >
               {isLoggingOut ? <Loader2 className="animate-spin" /> : <LogOut />}

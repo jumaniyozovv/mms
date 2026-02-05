@@ -9,10 +9,25 @@ const PUBLIC_PATHS = [
   "/api/auth/logout",
   "/api/auth/refresh",
 ];
-
 const AUTH_PATHS = ["/login", "/register"];
 
-export function proxy(request: NextRequest) {
+function decodeJwtPayload(token: string): { exp?: number } | null {
+  try {
+    const parts = token.split(".");
+    if (parts.length !== 3) return null;
+    return JSON.parse(atob(parts[1]));
+  } catch {
+    return null;
+  }
+}
+
+function isTokenExpired(token: string): boolean {
+  const payload = decodeJwtPayload(token);
+  if (!payload?.exp) return true;
+  return Date.now() >= payload.exp * 1000;
+}
+
+export default function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isPublicPath = PUBLIC_PATHS.some(
@@ -21,19 +36,23 @@ export function proxy(request: NextRequest) {
   const isAuthPath = AUTH_PATHS.some((path) => pathname === path);
   const isApiPath = pathname.startsWith("/api/");
 
+  const accessToken = request.cookies.get("access_token")?.value;
   const refreshToken = request.cookies.get("refresh_token")?.value;
-  const hasSession = !!refreshToken;
 
-  // Redirect logged-in users away from auth pages
-  if (isAuthPath && hasSession) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  const isAccessTokenValid = accessToken && !isTokenExpired(accessToken);
+  const isRefreshTokenValid = refreshToken && !isTokenExpired(refreshToken);
+
+  // No valid tokens on protected page - redirect to login
+  if (!isPublicPath && !isApiPath && !isAccessTokenValid && !isRefreshTokenValid) {
+    const response = NextResponse.redirect(new URL("/login", request.url));
+    response.cookies.delete("access_token");
+    response.cookies.delete("refresh_token");
+    return response;
   }
 
-  // Redirect non-logged-in users to login
-  if (!isPublicPath && !isApiPath && !hasSession) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
+  // Valid session + auth page → redirect to home
+  if (isAuthPath && isAccessTokenValid) {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
