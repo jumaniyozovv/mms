@@ -33,9 +33,4 @@ export interface ChangePasswordInput {
 
 export interface AuthResponse {
   user: AuthUser;
-  accessToken: string;
-}
-
-export interface RefreshResponse {
-  accessToken: string;
 }

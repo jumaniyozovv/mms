@@ -3,14 +3,17 @@ import { verifyAccessToken } from "@/backend/lib/jwt";
 import { unauthorizedResponse } from "@/backend/utils/api-response";
 import type { JwtPayload } from "@/backend/types/auth.types";
 
-export function extractBearerToken(request: NextRequest): string | null {
+function extractToken(request: NextRequest): string | null {
   const authHeader = request.headers.get("authorization");
-  if (!authHeader?.startsWith("Bearer ")) return null;
-  return authHeader.slice(7);
+  if (authHeader?.startsWith("Bearer ")) {
+    return authHeader.slice(7);
+  }
+
+  return request.cookies.get("access_token")?.value ?? null;
 }
 
 export function verifyAuth(request: NextRequest): JwtPayload | null {
-  const token = extractBearerToken(request);
+  const token = extractToken(request);
   if (!token) return null;
 
   try {

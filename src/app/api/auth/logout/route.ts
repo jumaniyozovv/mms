@@ -1,28 +1,21 @@
-import { NextRequest } from "next/server";
 import { logout } from "@/backend/services/auth.service";
-import {
-  parseRefreshTokenFromCookie,
-  clearRefreshTokenCookie,
-} from "@/backend/lib/cookie";
+import { getCookie, clearTokens } from "@/shared/lib/cookie";
 import { successResponse } from "@/backend/utils/api-response";
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    const cookieHeader = request.headers.get("cookie");
-    const refreshToken = parseRefreshTokenFromCookie(cookieHeader);
+    const refreshToken = await getCookie("refresh_token");
 
     if (refreshToken) {
       await logout(refreshToken);
     }
 
-    const response = successResponse({ message: "Logged out successfully" });
-    response.headers.set("Set-Cookie", clearRefreshTokenCookie());
+    await clearTokens();
 
-    return response;
+    return successResponse({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Logout error:", error);
-    const response = successResponse({ message: "Logged out successfully" });
-    response.headers.set("Set-Cookie", clearRefreshTokenCookie());
-    return response;
+    await clearTokens();
+    return successResponse({ message: "Logged out successfully" });
   }
 }

@@ -4,35 +4,16 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
-// Token storage helpers (using cookies for server-side access)
-const TOKEN_KEY = "access_token";
-
-export const getAccessToken = (): string | null => {
-  if (typeof window === "undefined") return null;
-  const match = document.cookie.match(new RegExp(`(^| )${TOKEN_KEY}=([^;]+)`));
-  return match ? match[2] : null;
-};
-
-export const setAccessToken = (token: string): void => {
-  if (typeof window === "undefined") return;
-  document.cookie = `${TOKEN_KEY}=${token}; path=/; SameSite=Lax`;
-};
-
-export const clearAccessToken = (): void => {
-  if (typeof window === "undefined") return;
-  document.cookie = `${TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-};
-
 // Refresh state
 let isRefreshing = false;
-let refreshSubscribers: ((token: string) => void)[] = [];
+let refreshSubscribers: (() => void)[] = [];
 
-const subscribeTokenRefresh = (callback: (token: string) => void) => {
+const subscribeTokenRefresh = (callback: () => void) => {
   refreshSubscribers.push(callback);
 };
 
-const onTokenRefreshed = (token: string) => {
-  refreshSubscribers.forEach((callback) => callback(token));
+const onTokenRefreshed = () => {
+  refreshSubscribers.forEach((callback) => callback());
   refreshSubscribers = [];
 };
 
@@ -46,11 +27,6 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = getAccessToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-
     if (config.data) {
       if (config.data instanceof FormData) {
         delete config.headers["Content-Type"];
@@ -75,8 +51,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve) => {
-          subscribeTokenRefresh((token: string) => {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
+          subscribeTokenRefresh(() => {
             resolve(api(originalRequest));
           });
         });
@@ -86,20 +61,10 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const response = await axios.post<{ accessToken: string }>(
-          "/api/auth/refresh",
-          {},
-          { withCredentials: true }
-        );
-
-        const newToken = response.data.accessToken;
-        setAccessToken(newToken);
-        onTokenRefreshed(newToken);
-
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        await axios.post("/api/auth/refresh", {}, { withCredentials: true });
+        onTokenRefreshed();
         return api(originalRequest);
       } catch (refreshError) {
-        clearAccessToken();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

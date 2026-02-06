@@ -1,19 +1,13 @@
-import { NextRequest } from "next/server";
 import { refreshAccessToken } from "@/backend/services/auth.service";
-import {
-  parseRefreshTokenFromCookie,
-  createRefreshTokenCookie,
-  clearRefreshTokenCookie,
-} from "@/backend/lib/cookie";
+import { getCookie, saveTokens, clearTokens } from "@/shared/lib/cookie";
 import {
   successResponse,
   unauthorizedResponse,
 } from "@/backend/utils/api-response";
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    const cookieHeader = request.headers.get("cookie");
-    const refreshToken = parseRefreshTokenFromCookie(cookieHeader);
+    const refreshToken = await getCookie("refresh_token");
 
     if (!refreshToken) {
       return unauthorizedResponse("No refresh token provided");
@@ -21,22 +15,16 @@ export async function POST(request: NextRequest) {
 
     const result = await refreshAccessToken(refreshToken);
     if (!result) {
-      const response = unauthorizedResponse("Invalid or expired refresh token");
-      response.headers.set("Set-Cookie", clearRefreshTokenCookie());
-      return response;
+      await clearTokens();
+      return unauthorizedResponse("Invalid or expired refresh token");
     }
 
-    const response = successResponse({ accessToken: result.accessToken });
-    response.headers.set(
-      "Set-Cookie",
-      createRefreshTokenCookie(result.newRefreshToken)
-    );
+    await saveTokens(result.accessToken, result.newRefreshToken);
 
-    return response;
+    return successResponse({ message: "Token refreshed" });
   } catch (error) {
     console.error("Refresh token error:", error);
-    const response = unauthorizedResponse("Failed to refresh token");
-    response.headers.set("Set-Cookie", clearRefreshTokenCookie());
-    return response;
+    await clearTokens();
+    return unauthorizedResponse("Failed to refresh token");
   }
 }

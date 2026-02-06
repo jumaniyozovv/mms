@@ -5,7 +5,7 @@ import {
   changePasswordSchema,
   formatZodErrors,
 } from "@/backend/validators/auth.validators";
-import { clearRefreshTokenCookie } from "@/backend/lib/cookie";
+import { clearTokens } from "@/shared/lib/cookie";
 import {
   successResponse,
   errorResponse,
@@ -30,12 +30,11 @@ async function handler(
       return errorResponse("Current password is incorrect", 400);
     }
 
-    const response = successResponse({
+    await clearTokens();
+
+    return successResponse({
       message: "Password changed successfully",
     });
-    response.headers.set("Set-Cookie", clearRefreshTokenCookie());
-
-    return response;
   } catch (error) {
     console.error("Change password error:", error);
     return errorResponse("Internal server error", 500);

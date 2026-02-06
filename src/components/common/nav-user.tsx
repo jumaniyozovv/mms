@@ -31,8 +31,6 @@ import {
 import { useAuth } from "@/shared/providers/AuthProvider"
 import { useLogout } from "@/features/auth/hooks"
 import { useRouter } from "next/navigation"
-import { clearAccessToken } from "@/shared/lib"
-
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { user, isLoading: isLoggingOut } = useAuth()
@@ -42,8 +40,6 @@ export function NavUser() {
   const handlLogout = () => {
     logout(undefined,
       { onSettled: () => router.push("/login") })
-
-      clearAccessToken()
   }
 
   return (

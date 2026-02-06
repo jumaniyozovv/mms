@@ -37,14 +37,17 @@
     const isApiPath = pathname.startsWith("/api/");
 
     const accessToken = request.cookies.get("access_token")?.value;
+    const refreshToken = request.cookies.get("refresh_token")?.value;
 
     const isAccessTokenValid = accessToken && !isTokenExpired(accessToken);
 
     // No valid tokens on protected page - redirect to login
     if (!isPublicPath && !isApiPath && !isAccessTokenValid) {
+      if (refreshToken) {
+        return NextResponse.next(); // let client-side handle the refresh
+      }
       const response = NextResponse.redirect(new URL("/login", request.url));
       response.cookies.delete("access_token");
-      response.cookies.delete("refresh_token");
       return response;
     }
 

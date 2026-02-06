@@ -4,7 +4,6 @@ import type {
   RegisterCredentials,
   ChangePasswordInput,
   AuthResponse,
-  RefreshResponse,
   RegistrationStatusResponse,
   AuthUser,
 } from "../types";
@@ -25,14 +24,12 @@ export function logout(): Promise<{ message: string }> {
   return apiClient.post<{ message: string }>("/auth/logout");
 }
 
-export function refreshToken(): Promise<RefreshResponse> {
-  return apiClient.post<RefreshResponse>("/auth/refresh");
+export function refreshToken(): Promise<{ message: string }> {
+  return apiClient.post<{ message: string }>("/auth/refresh");
 }
 
-export function getMe(accessToken: string): Promise<AuthUser> {
-  return apiClient.get<AuthUser>("/auth/me", {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
+export function getMe(): Promise<AuthUser> {
+  return apiClient.get<AuthUser>("/auth/me");
 }
 
 export function changePassword(input: ChangePasswordInput): Promise<{ message: string }> {

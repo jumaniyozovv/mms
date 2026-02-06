@@ -2,7 +2,6 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as authApi from "../services/auth.service";
-import { setAccessToken } from "@/shared/lib/axios";
 import type { AuthUser } from "../types";
 
 export const authKeys = {
@@ -16,9 +15,8 @@ export function useMe() {
     queryKey: authKeys.me(),
     queryFn: async (): Promise<AuthUser | null> => {
       try {
-        const { accessToken } = await authApi.refreshToken();
-        setAccessToken(accessToken);
-        return await authApi.getMe(accessToken);
+        await authApi.refreshToken();
+        return await authApi.getMe();
       } catch {
         return null;
       }
@@ -45,7 +43,6 @@ export function useRegister() {
   return useMutation({
     mutationFn: authApi.register,
     onSuccess: (data) => {
-      setAccessToken(data.accessToken);
       queryClient.setQueryData(authKeys.me(), data.user);
     },
   });

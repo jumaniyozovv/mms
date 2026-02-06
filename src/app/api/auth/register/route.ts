@@ -4,7 +4,7 @@ import {
   registerSchema,
   formatZodErrors,
 } from "@/backend/validators/auth.validators";
-import { createRefreshTokenCookie } from "@/backend/lib/cookie";
+import { saveTokens } from "@/shared/lib/cookie";
 import {
   successResponse,
   errorResponse,
@@ -41,13 +41,9 @@ export async function POST(request: NextRequest) {
       return errorResponse("Registration failed", 400);
     }
 
-    const response = successResponse(registerResult.authResult);
-    response.headers.set(
-      "Set-Cookie",
-      createRefreshTokenCookie(registerResult.refreshToken)
-    );
+    await saveTokens(registerResult.authResult.accessToken, registerResult.refreshToken);
 
-    return response;
+    return successResponse({ user: registerResult.authResult.user });
   } catch (error) {
     console.error("Register error:", error);
     return errorResponse("Internal server error", 500);

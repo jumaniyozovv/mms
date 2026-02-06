@@ -4,7 +4,7 @@ import {
   loginSchema,
   formatZodErrors,
 } from "@/backend/validators/auth.validators";
-import { createRefreshTokenCookie } from "@/backend/lib/cookie";
+import { saveTokens } from "@/shared/lib/cookie";
 import {
   successResponse,
   errorResponse,
@@ -25,13 +25,9 @@ export async function POST(request: NextRequest) {
       return errorResponse("Invalid email or password", 401);
     }
 
-    const response = successResponse(loginResult.authResult);
-    response.headers.set(
-      "Set-Cookie",
-      createRefreshTokenCookie(loginResult.refreshToken)
-    );
+    await saveTokens(loginResult.authResult.accessToken, loginResult.refreshToken);
 
-    return response;
+    return successResponse({ user: loginResult.authResult.user });
   } catch (error) {
     console.error("Login error:", error);
     return errorResponse("Internal server error", 500);
