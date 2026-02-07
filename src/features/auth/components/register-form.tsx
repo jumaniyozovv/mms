@@ -32,7 +32,7 @@ export function RegisterForm() {
   const registerMutation = useRegister();
   const { data: registrationStatus, isLoading: isCheckingStatus } =
     useRegistrationStatus();
-
+console.log(registrationStatus)
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {

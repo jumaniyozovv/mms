@@ -6,4 +6,4 @@ echo "Running database migrations..."
 echo "DATABASE_URL: $DATABASE_URL"
 prisma db push --schema=./prisma/schema.prisma --url="$DATABASE_URL" --accept-data-loss 2>&1 || echo "Migration failed!"
 echo "Starting app..."
-exec node server.js
+exec node custom-server.js

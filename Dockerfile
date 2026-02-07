@@ -29,6 +29,26 @@ RUN pnpm db:generate
 ENV DATABASE_URL="postgresql://nodir:nodir@db:5432/mms"
 RUN pnpm build
 
+# Compile custom server to a single JS file for production
+# Bundles server.ts + all @/ imports, externalizes node_modules packages
+RUN npx esbuild server.ts \
+  --bundle \
+  --platform=node \
+  --target=node20 \
+  --format=cjs \
+  --outfile=.next/standalone/custom-server.js \
+  --external:next \
+  --external:socket.io \
+  --external:ua-parser-js \
+  --external:ioredis \
+  --external:pg \
+  --external:cookie \
+  --external:jsonwebtoken \
+  --external:@prisma/client \
+  --external:@prisma/adapter-pg \
+  --alias:@/backend=./src/backend \
+  --alias:@/app=./src/app
+
 # Production stage
 FROM base AS runner
 WORKDIR /app

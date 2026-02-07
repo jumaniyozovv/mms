@@ -44,3 +44,8 @@ export { Prisma }
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model DeviceSession
+ * 
+ */
+export type DeviceSession = Prisma.DeviceSessionModel

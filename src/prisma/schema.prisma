@@ -13,6 +13,13 @@ enum UserRole {
   USER
 }
 
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  UNKNOWN
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -24,5 +31,27 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  deviceSessions DeviceSession[]
+
   @@map("users")
+}
+
+model DeviceSession {
+  id             String     @id @default(cuid())
+  userId         String     @map("user_id")
+  socketId       String     @unique @map("socket_id")
+  browserName    String?    @map("browser_name")
+  browserVersion String?    @map("browser_version")
+  osName         String?    @map("os_name")
+  osVersion      String?    @map("os_version")
+  deviceType     DeviceType @default(UNKNOWN) @map("device_type")
+  networkType    String?    @map("network_type")
+  ipAddress      String?    @map("ip_address")
+  connectedAt    DateTime   @default(now()) @map("connected_at")
+  disconnectedAt DateTime?  @map("disconnected_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("device_sessions")
 }

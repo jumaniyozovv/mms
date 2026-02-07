@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum UserRole {\n  ADMIN\n  MANAGER\n  USER\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  email     String   @unique\n  password  String\n  firstName String   @map(\"first_name\")\n  lastName  String   @map(\"last_name\")\n  role      UserRole @default(USER)\n  isActive  Boolean  @default(true) @map(\"is_active\")\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"users\")\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum UserRole {\n  ADMIN\n  MANAGER\n  USER\n}\n\nenum DeviceType {\n  DESKTOP\n  MOBILE\n  TABLET\n  UNKNOWN\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  email     String   @unique\n  password  String\n  firstName String   @map(\"first_name\")\n  lastName  String   @map(\"last_name\")\n  role      UserRole @default(USER)\n  isActive  Boolean  @default(true) @map(\"is_active\")\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  deviceSessions DeviceSession[]\n\n  @@map(\"users\")\n}\n\nmodel DeviceSession {\n  id             String     @id @default(cuid())\n  userId         String     @map(\"user_id\")\n  socketId       String     @unique @map(\"socket_id\")\n  browserName    String?    @map(\"browser_name\")\n  browserVersion String?    @map(\"browser_version\")\n  osName         String?    @map(\"os_name\")\n  osVersion      String?    @map(\"os_version\")\n  deviceType     DeviceType @default(UNKNOWN) @map(\"device_type\")\n  networkType    String?    @map(\"network_type\")\n  ipAddress      String?    @map(\"ip_address\")\n  connectedAt    DateTime   @default(now()) @map(\"connected_at\")\n  disconnectedAt DateTime?  @map(\"disconnected_at\")\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@index([userId])\n  @@map(\"device_sessions\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"first_name\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"last_name\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"UserRole\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\",\"dbName\":\"is_active\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":\"users\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"first_name\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"last_name\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"UserRole\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\",\"dbName\":\"is_active\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"deviceSessions\",\"kind\":\"object\",\"type\":\"DeviceSession\",\"relationName\":\"DeviceSessionToUser\"}],\"dbName\":\"users\"},\"DeviceSession\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_id\"},{\"name\":\"socketId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"socket_id\"},{\"name\":\"browserName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"browser_name\"},{\"name\":\"browserVersion\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"browser_version\"},{\"name\":\"osName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"os_name\"},{\"name\":\"osVersion\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"os_version\"},{\"name\":\"deviceType\",\"kind\":\"enum\",\"type\":\"DeviceType\",\"dbName\":\"device_type\"},{\"name\":\"networkType\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"network_type\"},{\"name\":\"ipAddress\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"ip_address\"},{\"name\":\"connectedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"connected_at\"},{\"name\":\"disconnectedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"disconnected_at\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"DeviceSessionToUser\"}],\"dbName\":\"device_sessions\"}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -185,6 +185,16 @@ export interface PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.deviceSession`: Exposes CRUD operations for the **DeviceSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DeviceSessions
+    * const deviceSessions = await prisma.deviceSession.findMany()
+    * ```
+    */
+  get deviceSession(): Prisma.DeviceSessionDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

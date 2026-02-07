@@ -20,18 +20,13 @@ export const menuItems: MenuItem[] = [
     icon: LayoutDashboardIcon,
     roles: ["admin", "manager"],
     path: "/dashboard",
-    subitems:[{
-        title:"aaa",
-        icon:Users,
-        path:"/dashboard/users",
-        roles:["admin"]
-    }]
+
   },
   {
     title: "Users",
     icon: UserIcon,
     roles: ["admin"],
-    path: "/dashboard/users",
+    path: "/users",
   },
   {
     title: "Settings",

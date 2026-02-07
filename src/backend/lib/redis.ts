@@ -4,7 +4,7 @@ const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
 
 let redis: Redis | null = null;
 
-function getRedis(): Redis {
+export function getRedis(): Redis {
   if (!redis) {
     redis = new Redis(redisUrl, {
       maxRetriesPerRequest: 3,

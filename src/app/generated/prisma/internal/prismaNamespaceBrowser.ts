@@ -51,7 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  DeviceSession: 'DeviceSession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -85,6 +86,24 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const DeviceSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  socketId: 'socketId',
+  browserName: 'browserName',
+  browserVersion: 'browserVersion',
+  osName: 'osName',
+  osVersion: 'osVersion',
+  deviceType: 'deviceType',
+  networkType: 'networkType',
+  ipAddress: 'ipAddress',
+  connectedAt: 'connectedAt',
+  disconnectedAt: 'disconnectedAt'
+} as const
+
+export type DeviceSessionScalarFieldEnum = (typeof DeviceSessionScalarFieldEnum)[keyof typeof DeviceSessionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -99,4 +118,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

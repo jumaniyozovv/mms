@@ -15,7 +15,6 @@ export function useMe() {
     queryKey: authKeys.me(),
     queryFn: async (): Promise<AuthUser | null> => {
       try {
-        await authApi.refreshToken();
         return await authApi.getMe();
       } catch {
         return null;

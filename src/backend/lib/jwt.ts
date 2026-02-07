@@ -13,7 +13,7 @@ export function signAccessToken(payload: JwtPayload): string {
 
 export function signRefreshToken(payload: JwtPayload): string {
   return jwt.sign(payload, REFRESH_SECRET, {
-    expiresIn: `${AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY_DAYS}d`,
+    expiresIn: `${AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY_HOURS}h`,
   });
 }
 
@@ -34,6 +34,6 @@ export function generateTokenPair(payload: JwtPayload): TokenPair {
 
 export function getRefreshTokenExpiry(): Date {
   const expiry = new Date();
-  expiry.setDate(expiry.getDate() + AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY_DAYS);
+  expiry.setTime(expiry.getTime() + AUTH_CONSTANTS.REFRESH_TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
   return expiry;
 }

@@ -1,12 +1,15 @@
 
-import MainLayout from "@/components/common/main-layout";
+import MainLayout from "@/layout/main-layout";
 import { AuthProvider } from "@/shared/providers/AuthProvider";
+import { SocketProvider } from "@/shared/providers/SocketProvider";
 import { ReactNode } from "react";
 
 export default function ProtectedeLayout({ children }: { children: ReactNode }) {
     return (
         <AuthProvider>
-            <MainLayout>{children}</MainLayout>
+            <SocketProvider>
+                <MainLayout>{children}</MainLayout>
+            </SocketProvider>
         </AuthProvider>
     )
 }

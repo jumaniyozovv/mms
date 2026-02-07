@@ -384,7 +384,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  DeviceSession: 'DeviceSession'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -400,7 +401,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user"
+    modelProps: "user" | "deviceSession"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -478,6 +479,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DeviceSession: {
+      payload: Prisma.$DeviceSessionPayload<ExtArgs>
+      fields: Prisma.DeviceSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DeviceSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DeviceSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.DeviceSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DeviceSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>
+        }
+        findMany: {
+          args: Prisma.DeviceSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>[]
+        }
+        create: {
+          args: Prisma.DeviceSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>
+        }
+        createMany: {
+          args: Prisma.DeviceSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DeviceSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.DeviceSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>
+        }
+        update: {
+          args: Prisma.DeviceSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.DeviceSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DeviceSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DeviceSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.DeviceSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DeviceSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.DeviceSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDeviceSession>
+        }
+        groupBy: {
+          args: Prisma.DeviceSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DeviceSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceSessionCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -532,6 +607,24 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const DeviceSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  socketId: 'socketId',
+  browserName: 'browserName',
+  browserVersion: 'browserVersion',
+  osName: 'osName',
+  osVersion: 'osVersion',
+  deviceType: 'deviceType',
+  networkType: 'networkType',
+  ipAddress: 'ipAddress',
+  connectedAt: 'connectedAt',
+  disconnectedAt: 'disconnectedAt'
+} as const
+
+export type DeviceSessionScalarFieldEnum = (typeof DeviceSessionScalarFieldEnum)[keyof typeof DeviceSessionScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -546,6 +639,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -600,6 +701,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DeviceType'
+ */
+export type EnumDeviceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeviceType'>
+    
+
+
+/**
+ * Reference to a field of type 'DeviceType[]'
+ */
+export type ListEnumDeviceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DeviceType[]'>
     
 
 
@@ -712,6 +827,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  deviceSession?: Prisma.DeviceSessionOmit
 }
 
 /* Types for Logging */
