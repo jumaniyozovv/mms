@@ -1,3 +1,4 @@
+import { NextRequest } from "next/server";
 import { refreshAccessToken } from "@/backend/services/auth.service";
 import { getCookie, saveTokens, clearTokens } from "@/shared/lib/cookie";
 import {
@@ -5,9 +6,19 @@ import {
   unauthorizedResponse,
 } from "@/backend/utils/api-response";
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    const refreshToken = await getCookie("refresh_token");
+    // Accept refresh token from request body (mobile) or cookie (web)
+    let refreshToken: string | null = null;
+    try {
+      const body = await request.json();
+      refreshToken = body.refreshToken ?? null;
+    } catch {
+      // No body, fall through to cookie
+    }
+    if (!refreshToken) {
+      refreshToken = await getCookie("refresh_token");
+    }
 
     if (!refreshToken) {
       return unauthorizedResponse("No refresh token provided");
@@ -21,7 +32,10 @@ export async function POST() {
 
     await saveTokens(result.accessToken, result.newRefreshToken);
 
-    return successResponse({ message: "Token refreshed" });
+    return successResponse({
+      accessToken: result.accessToken,
+      refreshToken: result.newRefreshToken,
+    });
   } catch (error) {
     console.error("Refresh token error:", error);
     await clearTokens();

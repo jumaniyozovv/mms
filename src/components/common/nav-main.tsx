@@ -1,6 +1,6 @@
 import { usePathname } from "next/navigation";
 import { SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar";
-import { menuItems, SubMenuItem } from "@/layout/menu";
+import { menuItems, SubMenuItem } from "@/lib/menu";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { ChevronRight } from "lucide-react";

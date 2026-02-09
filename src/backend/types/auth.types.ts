@@ -34,4 +34,5 @@ export interface ChangePasswordInput {
 export interface AuthResult {
   user: AuthUser;
   accessToken: string;
+  refreshToken:string;
 }

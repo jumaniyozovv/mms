@@ -1,5 +1,5 @@
 
-import MainLayout from "@/components/common/main-layout";
+import MainLayout from "@/lib/main-layout";
 import { AuthProvider } from "@/shared/providers/AuthProvider";
 import { ReactNode } from "react";
 

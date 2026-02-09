@@ -9,12 +9,11 @@ import {
 
 import { NavUser } from "./nav-user";
 import { SidebarMenuWithSubitems } from "./nav-main";
-import { useMe } from "@/features/auth/hooks/use-auth";
 
 export default function AppSidebar() {
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" variant="floating">
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenuWithSubitems />

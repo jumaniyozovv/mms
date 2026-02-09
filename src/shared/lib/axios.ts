@@ -18,10 +18,10 @@ const onTokenRefreshed = () => {
 };
 
 // Create axios instance
+// httpOnly cookies are sent automatically by the browser for same-origin requests
 const api = axios.create({
   baseURL: "/api",
   timeout: 30000,
-  withCredentials: true,
 });
 
 // Request interceptor

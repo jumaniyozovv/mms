@@ -52,7 +52,7 @@ export async function canRegister(): Promise<boolean> {
 
 export async function register(
   input: RegisterInput
-): Promise<{ authResult: AuthResult; refreshToken: string } | null> {
+): Promise<{ authResult: AuthResult } | null> {
   // Only allow registration if no users exist
   const userCount = await getUserCount();
   if (userCount > 0) {
@@ -94,14 +94,14 @@ export async function register(
     authResult: {
       user: toAuthUser(user),
       accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
     },
-    refreshToken: tokens.refreshToken,
   };
 }
 
 export async function login(
   credentials: LoginCredentials
-): Promise<{ authResult: AuthResult; refreshToken: string } | null> {
+): Promise<{ authResult: AuthResult} | null> {
   const user = await findUserByEmail(credentials.email);
   if (!user) return null;
 
@@ -131,8 +131,8 @@ export async function login(
     authResult: {
       user: toAuthUser(user),
       accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
     },
-    refreshToken: tokens.refreshToken,
   };
 }
 

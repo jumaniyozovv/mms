@@ -25,6 +25,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useLogin } from "../hooks/use-auth";
 import { loginSchema, type LoginFormData } from "../schema";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export function LoginForm() {
   const onSubmit = (data: LoginFormData) => {
     loginMutation.mutate(data, {
       onSuccess: () => {
+        toast.success("Log in successful")
         const redirect = searchParams.get("redirect") || "/";
         router.push(redirect);
       },

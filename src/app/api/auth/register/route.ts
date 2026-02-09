@@ -41,9 +41,13 @@ export async function POST(request: NextRequest) {
       return errorResponse("Registration failed", 400);
     }
 
-    await saveTokens(registerResult.authResult.accessToken, registerResult.refreshToken);
+    await saveTokens(registerResult.authResult.accessToken, registerResult.authResult.refreshToken);
 
-    return successResponse({ user: registerResult.authResult.user });
+    return successResponse({
+      user: registerResult.authResult.user,
+      accessToken: registerResult.authResult.accessToken,
+      refreshToken: registerResult.authResult.refreshToken,
+    });
   } catch (error) {
     console.error("Register error:", error);
     return errorResponse("Internal server error", 500);

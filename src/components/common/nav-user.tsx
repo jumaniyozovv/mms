@@ -31,6 +31,7 @@ import {
 import { useAuth } from "@/shared/providers/AuthProvider"
 import { useLogout } from "@/features/auth/hooks"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 export function NavUser() {
   const { isMobile } = useSidebar()
   const { user, isLoading: isLoggingOut } = useAuth()
@@ -39,7 +40,12 @@ export function NavUser() {
 
   const handlLogout = () => {
     logout(undefined,
-      { onSettled: () => router.push("/login") })
+      {
+        onSettled: () => {
+          router.push("/login")
+          toast.success("Log out successful")
+        }
+      })
   }
 
   return (
@@ -51,8 +57,8 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-10 w-10 rounded-lg flex items-center justify-center">
-                <AvatarFallback className="rounded-lg">{user?.firstName[0].toLowerCase()}{user?.lastName[0].toLowerCase()}</AvatarFallback>
+              <Avatar className="h-10 w-10 rounded-full group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8">
+                <AvatarFallback className="rounded-full">{user?.firstName[0].toLowerCase()}{user?.lastName[0].toLowerCase()}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user?.firstName} {user?.lastName}</span>

@@ -25,9 +25,13 @@ export async function POST(request: NextRequest) {
       return errorResponse("Invalid email or password", 401);
     }
 
-    await saveTokens(loginResult.authResult.accessToken, loginResult.refreshToken);
+    await saveTokens(loginResult.authResult.accessToken, loginResult.authResult.refreshToken);
 
-    return successResponse({ user: loginResult.authResult.user });
+    return successResponse({
+      user: loginResult.authResult.user,
+      accessToken: loginResult.authResult.accessToken,
+      refreshToken: loginResult.authResult.refreshToken,
+    });
   } catch (error) {
     console.error("Login error:", error);
     return errorResponse("Internal server error", 500);
