@@ -1,8 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import * as authApi from "../services/auth.service";
-import type { AuthUser } from "../types";
+import { checkRegistrationStatus, getMe, login, logout, register } from "../services/auth.service";
 
 export const authKeys = {
   all: ["auth"] as const,
@@ -13,14 +12,7 @@ export const authKeys = {
 export function useMe() {
   return useQuery({
     queryKey: authKeys.me(),
-    queryFn: async (): Promise<AuthUser | null> => {
-      try {
-        await authApi.refreshToken();
-        return await authApi.getMe();
-      } catch {
-        return null;
-      }
-    },
+    queryFn: getMe,
     staleTime: 5 * 60 * 1000,
     retry: false,
   });
@@ -30,7 +22,7 @@ export function useLogin() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: authApi.login,
+    mutationFn: login,
     onSuccess: (data) => {
       queryClient.setQueryData(authKeys.me(), data.user);
     },
@@ -41,7 +33,7 @@ export function useRegister() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: authApi.register,
+    mutationFn: register,
     onSuccess: (data) => {
       queryClient.setQueryData(authKeys.me(), data.user);
     },
@@ -52,7 +44,7 @@ export function useLogout() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: authApi.logout,
+    mutationFn: logout,
     onSettled: () => {
       queryClient.clear();
     },
@@ -62,7 +54,7 @@ export function useLogout() {
 export function useRegistrationStatus() {
   return useQuery({
     queryKey: authKeys.registrationStatus(),
-    queryFn: authApi.checkRegistrationStatus,
+    queryFn: checkRegistrationStatus,
     staleTime: 30 * 1000,
   });
 }

@@ -63,26 +63,26 @@ export function RegisterForm() {
     );
   }
 
-  if (registrationStatus ) {
-    return (
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Registration Closed
-          </CardTitle>
-          <CardDescription className="text-center">
-            An admin account has already been created. Registration is no longer
-            available.
-          </CardDescription>
-        </CardHeader>
-        <CardFooter>
-          <Button asChild className="w-full">
-            <Link href="/login">Go to Login</Link>
-          </Button>
-        </CardFooter>
-      </Card>
-    );
-  }
+  // if (registrationStatus ) {
+  //   return (
+  //     <Card className="w-full max-w-md">
+  //       <CardHeader>
+  //         <CardTitle className="text-2xl font-bold text-center">
+  //           Registration Closed
+  //         </CardTitle>
+  //         <CardDescription className="text-center">
+  //           An admin account has already been created. Registration is no longer
+  //           available.
+  //         </CardDescription>
+  //       </CardHeader>
+  //       <CardFooter>
+  //         <Button asChild className="w-full">
+  //           <Link href="/login">Go to Login</Link>
+  //         </Button>
+  //       </CardFooter>
+  //     </Card>
+  //   );
+  // }
 
   return (
     <Card className="w-full max-w-md">

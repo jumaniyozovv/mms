@@ -8,7 +8,7 @@ import type {
   AuthUser,
 } from "../types";
 
-export function checkRegistrationStatus(): Promise<RegistrationStatusResponse> {
+export  function checkRegistrationStatus(): Promise<RegistrationStatusResponse> {
   return apiClient.get<RegistrationStatusResponse>("/auth/register");
 }
 

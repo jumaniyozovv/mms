@@ -10,12 +10,16 @@ const DEFAULT_OPTIONS: Partial<ResponseCookie> = {
 
 function getTokenAge(token: string): number {
   try {
+    const base64Payload = token.split(".")[1];
+    // JWT uses base64url, but we need to handle both base64 and base64url
     const payload = JSON.parse(
-      Buffer.from(token.split(".")[1], "base64url").toString()
+      Buffer.from(base64Payload, "base64").toString("utf-8")
     );
     return Math.max(0, payload.exp - Math.floor(Date.now() / 1000));
-  } catch {
-    return 0;
+  } catch (error) {
+    console.error("Failed to parse token for maxAge:", error);
+    // Return a default maxAge instead of 0 (which would delete the cookie)
+    return 3600; // 1 hour fallback
   }
 }
 
