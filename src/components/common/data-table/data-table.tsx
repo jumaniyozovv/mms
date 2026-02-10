@@ -3,10 +3,9 @@
 import {
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  type ColumnDef,
   type SortingState,
 } from "@tanstack/react-table"
 import * as React from "react"
@@ -20,42 +19,48 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
-import type { DataTableProps } from "./types"
 import { DataTablePagination } from "./data-table-pagination"
-import { DataTableToolbar } from "./data-table-toolbar"
+
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData, unknown>[]
+  data: TData[]
+  total: number
+  page: number
+  limit: number
+  onPageChange: (page: number) => void
+  onPageSizeChange: (size: number) => void
+  isLoading?: boolean
+  toolbarChildren?: React.ReactNode
+}
 
 export function DataTable<TData>({
   columns,
   data,
-  searchPlaceholder,
-  pageSizeOptions,
+  total,
+  page,
+  limit,
+  onPageChange,
+  onPageSizeChange,
+  isLoading,
   toolbarChildren,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [globalFilter, setGlobalFilter] = React.useState("")
 
   const table = useReactTable({
     data,
     columns,
-    state: { sorting, globalFilter },
+    state: { sorting },
     onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
   })
 
   return (
-    <div className="space-y-4">
-      <DataTableToolbar
-        table={table}
-        searchPlaceholder={searchPlaceholder}
-      >
-        {toolbarChildren}
-      </DataTableToolbar>
+    <div className="space-y-3">
+      {toolbarChildren}
 
-      <div className="rounded-md border overflow-hidden">
+      <div className={cn("rounded-md border overflow-hidden", isLoading && "opacity-50")}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -64,7 +69,7 @@ export function DataTable<TData>({
                   <TableHead
                     key={header.id}
                     className={cn(
-                      header.column.getCanSort() && "cursor-pointer select-none"
+                      header.column.getCanSort() && "cursor-pointer select-none","h-10!"
                     )}
                     onClick={header.column.getToggleSortingHandler()}
                   >
@@ -82,7 +87,7 @@ export function DataTable<TData>({
           <TableBody>
             {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} className="h-8!">
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
@@ -107,7 +112,13 @@ export function DataTable<TData>({
         </Table>
       </div>
 
-      <DataTablePagination table={table} pageSizeOptions={pageSizeOptions} />
+      <DataTablePagination
+        page={page}
+        limit={limit}
+        total={total}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+      />
     </div>
   )
 }

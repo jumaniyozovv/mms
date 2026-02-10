@@ -24,14 +24,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useRegister, useRegistrationStatus } from "../hooks/use-auth";
+import { useRegister } from "../hooks/use-auth";
 import { registerSchema, type RegisterFormData } from "../schema";
 
 export function RegisterForm() {
   const router = useRouter();
   const registerMutation = useRegister();
-  const { data: registrationStatus, isLoading: isCheckingStatus } =
-    useRegistrationStatus();
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -52,47 +50,14 @@ export function RegisterForm() {
     });
   };
 
-  if (isCheckingStatus) {
-    return (
-      <Card className="w-full max-w-md">
-        <CardContent className="py-8">
-          <p className="text-center text-muted-foreground">
-            Checking registration status...
-          </p>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // if (registrationStatus ) {
-  //   return (
-  //     <Card className="w-full max-w-md">
-  //       <CardHeader>
-  //         <CardTitle className="text-2xl font-bold text-center">
-  //           Registration Closed
-  //         </CardTitle>
-  //         <CardDescription className="text-center">
-  //           An admin account has already been created. Registration is no longer
-  //           available.
-  //         </CardDescription>
-  //       </CardHeader>
-  //       <CardFooter>
-  //         <Button asChild className="w-full">
-  //           <Link href="/login">Go to Login</Link>
-  //         </Button>
-  //       </CardFooter>
-  //     </Card>
-  //   );
-  // }
-
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">
-          Create Admin Account
+          Create Account
         </CardTitle>
         <CardDescription className="text-center">
-          This will be the first administrator account
+          Register a new account
         </CardDescription>
       </CardHeader>
 
@@ -212,7 +177,7 @@ export function RegisterForm() {
             >
               {registerMutation.isPending
                 ? "Creating account..."
-                : "Create Admin Account"}
+                : "Create Account"}
             </Button>
 
             <p className="text-sm text-muted-foreground text-center">

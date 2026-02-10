@@ -7,7 +7,6 @@ export interface AuthUser {
   lastName: string;
   role: UserRole;
   phone:string;
-  isActive: boolean;
   createdAt: string;
 }
 

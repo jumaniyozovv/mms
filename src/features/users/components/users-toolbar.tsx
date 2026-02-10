@@ -2,6 +2,7 @@
 
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { useAuth } from "@/shared/providers/AuthProvider"
 import { CreateUserDialog } from "./create-user-dialog"
 
 interface UsersToolbarProps {
@@ -10,6 +11,8 @@ interface UsersToolbarProps {
 }
 
 export function UsersToolbar({ search, onSearchChange }: UsersToolbarProps) {
+  const { user } = useAuth()
+
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="relative max-w-sm w-full">
@@ -21,7 +24,7 @@ export function UsersToolbar({ search, onSearchChange }: UsersToolbarProps) {
           className="pl-8"
         />
       </div>
-      <CreateUserDialog />
+      {user?.role === "ADMIN" && <CreateUserDialog />}
     </div>
   )
 }

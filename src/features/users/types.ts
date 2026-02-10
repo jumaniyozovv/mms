@@ -5,7 +5,6 @@ export interface UserListItem {
   lastName: string;
   phone: string | null;
   role: "ADMIN" | "MANAGER" | "USER";
-  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -19,9 +18,6 @@ export interface UserListFilters {
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
 }
 
 export interface CreateUserInput {
@@ -31,4 +27,11 @@ export interface CreateUserInput {
   lastName: string;
   phone?: string;
   role?: "ADMIN" | "MANAGER" | "USER";
+}
+
+export interface UpdateUserInput {
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  role: "ADMIN" | "MANAGER" | "USER";
 }

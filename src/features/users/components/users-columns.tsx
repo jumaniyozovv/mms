@@ -2,7 +2,8 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import type { UserListItem } from "../types"
-import {format} from "date-fns"
+import { format } from "date-fns"
+import { UserRowActions } from "./user-row-actions"
 
 export const usersColumns: ColumnDef<UserListItem, unknown>[] = [
   {
@@ -27,21 +28,13 @@ export const usersColumns: ColumnDef<UserListItem, unknown>[] = [
     header: "Role",
   },
   {
-    accessorKey: "isActive",
-    header: "Status",
-    cell: ({ row }) => {
-      const isActive = row.original.isActive
-      return (
-        <span className={isActive ? "text-green-600" : "text-red-500"}>
-          {isActive ? "Active" : "Inactive"}
-        </span>
-      )
-    },
-  },
-  {
     accessorKey: "createdAt",
     header: "Created At",
     cell: ({ row }) =>
-      format(row.original.createdAt,"dd-MM-yyyy"),
+      format(row.original.createdAt, "dd-MM-yyyy"),
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <UserRowActions user={row.original} />,
   },
 ]

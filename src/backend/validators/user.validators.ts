@@ -21,5 +21,13 @@ export const userListSchema = z.object({
   search: z.string().optional(),
 });
 
+export const updateUserSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  phone: z.string().optional(),
+  role: z.enum(["ADMIN", "MANAGER", "USER"]),
+});
+
 export type CreateUserSchemaInput = z.infer<typeof createUserSchema>;
 export type UserListSchemaInput = z.infer<typeof userListSchema>;
+export type UpdateUserSchemaInput = z.infer<typeof updateUserSchema>;

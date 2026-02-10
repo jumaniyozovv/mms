@@ -68,6 +68,22 @@ export async function findUsers(
   return { data, total };
 }
 
+export async function updateUser(
+  id: string,
+  data: { firstName: string; lastName: string; phone?: string; role: "ADMIN" | "MANAGER" | "USER" }
+): Promise<User> {
+  return prisma.user.update({
+    where: { id },
+    data,
+  });
+}
+
+export async function deleteUser(id: string): Promise<User> {
+  return prisma.user.delete({
+    where: { id },
+  });
+}
+
 export async function getUserCount(): Promise<number> {
   return prisma.user.count();
 }

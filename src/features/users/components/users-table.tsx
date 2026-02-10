@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ServerDataTable } from "@/components/common/data-table"
+import { DataTable } from "@/components/common/data-table"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useUsers } from "../hooks"
 import { usersColumns } from "./users-columns"
@@ -27,6 +27,8 @@ export function UsersTable() {
 
   const { data, isLoading } = useUsers(activeFilters)
 
+  const total = data?.total ?? 0
+
   function handleSearchChange(value: string) {
     setSearch(value)
     setFilters((prev) => ({ ...prev, page: 1 }))
@@ -41,13 +43,12 @@ export function UsersTable() {
   }
 
   return (
-    <ServerDataTable
+    <DataTable
       columns={usersColumns}
       data={data?.data ?? []}
-      total={data?.total ?? 0}
-      page={data?.page ?? 1}
-      limit={data?.limit ?? 10}
-      totalPages={data?.totalPages ?? 1}
+      total={total}
+      page={filters.page}
+      limit={filters.limit}
       onPageChange={handlePageChange}
       onPageSizeChange={handlePageSizeChange}
       isLoading={isLoading}

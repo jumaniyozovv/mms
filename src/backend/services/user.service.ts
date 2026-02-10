@@ -1,7 +1,10 @@
 import {
   findUsers,
   findUserByEmail,
+  findUserById,
   createUser,
+  updateUser,
+  deleteUser,
 } from "@/backend/repositories/user.repository";
 import { hashPassword } from "@/backend/lib/password";
 import type { User } from "@/app/generated/prisma/client";
@@ -10,6 +13,7 @@ import type {
   UserListFilters,
   PaginatedResult,
   CreateUserInput,
+  UpdateUserInput,
 } from "@/backend/types/user.types";
 
 function toUserListItem(user: User): UserListItem {
@@ -20,7 +24,6 @@ function toUserListItem(user: User): UserListItem {
     lastName: user.lastName,
     phone: user.phone,
     role: user.role,
-    isActive: user.isActive,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };
@@ -33,9 +36,6 @@ export async function listUsers(
   return {
     data: data.map(toUserListItem),
     total,
-    page: filters.page,
-    limit: filters.limit,
-    totalPages: Math.ceil(total / filters.limit),
   };
 }
 
@@ -57,4 +57,38 @@ export async function createNewUser(
   });
 
   return toUserListItem(user);
+}
+
+export async function updateExistingUser(
+  id: string,
+  input: UpdateUserInput
+): Promise<UserListItem | null> {
+  const existing = await findUserById(id);
+  if (!existing) return null;
+
+  const user = await updateUser(id, {
+    firstName: input.firstName,
+    lastName: input.lastName,
+    phone: input.phone,
+    role: input.role,
+  });
+
+  return toUserListItem(user);
+}
+
+export async function deleteExistingUser(
+  id: string,
+  requestingUserId: string
+): Promise<{ success: boolean; error?: string }> {
+  if (id === requestingUserId) {
+    return { success: false, error: "Cannot delete your own account" };
+  }
+
+  const existing = await findUserById(id);
+  if (!existing) {
+    return { success: false, error: "User not found" };
+  }
+
+  await deleteUser(id);
+  return { success: true };
 }

@@ -3,7 +3,6 @@ import {
   findUserById,
   updateUserPassword,
   createUser,
-  getUserCount,
 } from "@/backend/repositories/user.repository";
 import {
   createRefreshToken,
@@ -33,7 +32,6 @@ function toAuthUser(user: User): AuthUser {
     firstName: user.firstName,
     lastName: user.lastName,
     role: user.role,
-    isActive: user.isActive,
     createdAt: user.createdAt,
   };
 }
@@ -47,19 +45,12 @@ export interface RegisterInput {
 }
 
 export async function canRegister(): Promise<boolean> {
-  const userCount = await getUserCount();
-  return userCount === 0;
+  return true;
 }
 
 export async function register(
   input: RegisterInput
 ): Promise<{ authResult: AuthResult } | null> {
-  // Only allow registration if no users exist
-  const userCount = await getUserCount();
-  if (userCount > 0) {
-    return null;
-  }
-
   // Check if email already exists
   const existingUser = await findUserByEmail(input.email);
   if (existingUser) {
@@ -68,14 +59,13 @@ export async function register(
 
   const hashedPassword = await hashPassword(input.password);
 
-  // First user is always an admin
   const user = await createUser({
     email: input.email,
     password: hashedPassword,
     firstName: input.firstName,
     lastName: input.lastName,
     phone: input.phone,
-    role: "ADMIN",
+    role: "USER",
   });
 
   const payload: JwtPayload = {
@@ -112,8 +102,6 @@ export async function login(
     user.password
   );
   if (!isValidPassword) return null;
-
-  if (!user.isActive) return null;
 
   const payload: JwtPayload = {
     userId: user.id,
@@ -159,7 +147,7 @@ export async function refreshAccessToken(
   }
 
   const user = await findUserById(payload.userId);
-  if (!user || !user.isActive) return null;
+  if (!user) return null;
 
   await revokeRefreshToken(refreshToken);
 
@@ -185,7 +173,7 @@ export async function refreshAccessToken(
 
 export async function getCurrentUser(userId: string): Promise<AuthUser | null> {
   const user = await findUserById(userId);
-  if (!user || !user.isActive) return null;
+  if (!user) return null;
   return toAuthUser(user);
 }
 

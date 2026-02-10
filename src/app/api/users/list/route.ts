@@ -9,7 +9,7 @@ import {
   validationErrorResponse,
 } from "@/backend/utils/api-response";
 
-export const POST = withRole("ADMIN", async (request: NextRequest) => {
+export const POST = withRole("USER", async (request: NextRequest) => {
   try {
     const body = await request.json();
 

@@ -4,6 +4,7 @@ import type {
   UserListFilters,
   PaginatedResponse,
   CreateUserInput,
+  UpdateUserInput,
 } from "../types";
 
 export function listUsers(
@@ -17,4 +18,12 @@ export function listUsers(
 
 export function createUser(input: CreateUserInput): Promise<UserListItem> {
   return apiClient.post<UserListItem>("/users", input);
+}
+
+export function updateUser(id: string, input: UpdateUserInput): Promise<UserListItem> {
+  return apiClient.put<UserListItem>(`/users/${id}`, input);
+}
+
+export function deleteUser(id: string): Promise<void> {
+  return apiClient.delete(`/users/${id}`);
 }

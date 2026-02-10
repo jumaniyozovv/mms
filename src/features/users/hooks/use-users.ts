@@ -3,8 +3,8 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
-import { listUsers, createUser } from "../services";
-import type { UserListFilters, CreateUserInput } from "../types";
+import { listUsers, createUser, updateUser, deleteUser } from "../services";
+import type { UserListFilters, CreateUserInput, UpdateUserInput } from "../types";
 
 export const userKeys = {
   all: ["users"] as const,
@@ -24,6 +24,29 @@ export function useCreateUser() {
 
   return useMutation({
     mutationFn: (input: CreateUserInput) => createUser(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
+    },
+  });
+}
+
+export function useUpdateUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, input }: { id: string; input: UpdateUserInput }) =>
+      updateUser(id, input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.all });
+    },
+  });
+}
+
+export function useDeleteUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteUser(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.all });
     },
