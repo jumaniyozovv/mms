@@ -43,6 +43,7 @@ export interface RegisterInput {
   password: string;
   firstName: string;
   lastName: string;
+  phone:string;
 }
 
 export async function canRegister(): Promise<boolean> {
@@ -73,6 +74,7 @@ export async function register(
     password: hashedPassword,
     firstName: input.firstName,
     lastName: input.lastName,
+    phone: input.phone,
     role: "ADMIN",
   });
 

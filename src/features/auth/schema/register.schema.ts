@@ -20,6 +20,7 @@ export const registerSchema = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
       "Password must contain uppercase, lowercase, and a number"
     ),
+    phone:z.string()
 });
 
 export type RegisterFormData = z.infer<typeof registerSchema>;

@@ -39,6 +39,7 @@ export function RegisterForm() {
       firstName: "",
       lastName: "",
       email: "",
+      phone:"",
       password: "",
     },
   });
@@ -162,7 +163,24 @@ export function RegisterForm() {
                 </FormItem>
               )}
             />
-
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="+998901234567"
+                      disabled={registerMutation.isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="password"

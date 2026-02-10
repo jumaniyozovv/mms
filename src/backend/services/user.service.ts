@@ -1,0 +1,60 @@
+import {
+  findUsers,
+  findUserByEmail,
+  createUser,
+} from "@/backend/repositories/user.repository";
+import { hashPassword } from "@/backend/lib/password";
+import type { User } from "@/app/generated/prisma/client";
+import type {
+  UserListItem,
+  UserListFilters,
+  PaginatedResult,
+  CreateUserInput,
+} from "@/backend/types/user.types";
+
+function toUserListItem(user: User): UserListItem {
+  return {
+    id: user.id,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    phone: user.phone,
+    role: user.role,
+    isActive: user.isActive,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+}
+
+export async function listUsers(
+  filters: UserListFilters
+): Promise<PaginatedResult<UserListItem>> {
+  const { data, total } = await findUsers(filters);
+  return {
+    data: data.map(toUserListItem),
+    total,
+    page: filters.page,
+    limit: filters.limit,
+    totalPages: Math.ceil(total / filters.limit),
+  };
+}
+
+export async function createNewUser(
+  input: CreateUserInput
+): Promise<UserListItem | null> {
+  const existing = await findUserByEmail(input.email);
+  if (existing) return null;
+
+  const hashedPassword = await hashPassword(input.password);
+
+  const user = await createUser({
+    email: input.email,
+    password: hashedPassword,
+    firstName: input.firstName,
+    lastName: input.lastName,
+    phone: input.phone,
+    role: input.role,
+  });
+
+  return toUserListItem(user);
+}
