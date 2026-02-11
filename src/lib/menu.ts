@@ -1,4 +1,4 @@
-import { LayoutDashboardIcon, UserIcon, SettingsIcon, LucideIcon, Users } from "lucide-react";
+import { LayoutDashboardIcon, UserIcon, SettingsIcon, CalendarDays, LucideIcon, Users, FileBarChart } from "lucide-react";
 
 export interface SubMenuItem{
     title: string;
@@ -26,6 +26,32 @@ export const menuItems: MenuItem[] = [
     icon: UserIcon,
     roles: ["admin"],
     path: "/users",
+  },
+  {
+    title: "Day Off",
+    icon: CalendarDays,
+    roles: ["admin", "manager", "user"],
+    path: "/day-off",
+    subitems: [
+      {
+        title: "Dashboard",
+        icon: LayoutDashboardIcon,
+        roles: ["admin", "manager", "user"],
+        path: "/day-off",
+      },
+      {
+        title: "Reports",
+        icon: FileBarChart,
+        roles: ["admin", "manager", "user"],
+        path: "/day-off/reports",
+      },
+      {
+        title: "Settings",
+        icon: SettingsIcon,
+        roles: ["admin", "manager"],
+        path: "/day-off/settings",
+      },
+    ],
   },
   {
     title: "Settings",

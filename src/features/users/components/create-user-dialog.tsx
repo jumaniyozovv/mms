@@ -1,11 +1,11 @@
 "use client"
 
-import * as React from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Plus } from "lucide-react"
 import { toast } from "sonner"
 
+import { useDisclosure } from "@/hooks/use-disclosure"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -36,7 +36,7 @@ import { useCreateUser } from "../hooks"
 import { createUserSchema, type CreateUserFormData } from "../schema"
 
 export function CreateUserDialog() {
-  const [open, setOpen] = React.useState(false)
+  const { open, onOpenChange } = useDisclosure()
   const createUserMutation = useCreateUser()
 
   const form = useForm<CreateUserFormData>({
@@ -56,7 +56,7 @@ export function CreateUserDialog() {
       onSuccess: () => {
         toast.success("User created successfully")
         form.reset()
-        setOpen(false)
+        onOpenChange(false)
       },
       onError: (error) => {
         toast.error(error.message || "Failed to create user")
@@ -65,7 +65,7 @@ export function CreateUserDialog() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm">
           <Plus />
@@ -88,7 +88,7 @@ export function CreateUserDialog() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel >First Name</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="First name"

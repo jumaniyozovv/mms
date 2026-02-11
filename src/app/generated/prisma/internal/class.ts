@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum UserRole {\n  ADMIN\n  MANAGER\n  USER\n}\n\nmodel User {\n  id        String   @id @default(cuid())\n  email     String   @unique\n  password  String\n  firstName String   @map(\"first_name\")\n  lastName  String   @map(\"last_name\")\n  phone     String   @map(\"phone\")\n  role      UserRole @default(USER)\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"users\")\n}\n",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nenum UserRole {\n  ADMIN\n  MANAGER\n  USER\n}\n\nenum DayOffType {\n  PAID\n  SICK\n  PERSONAL\n}\n\nenum DayOffStatus {\n  PENDING\n  APPROVED\n  REJECTED\n}\n\nmodel User {\n  id              String   @id @default(cuid())\n  email           String   @unique\n  password        String\n  firstName       String   @map(\"first_name\")\n  lastName        String   @map(\"last_name\")\n  phone           String   @map(\"phone\")\n  role            UserRole @default(USER)\n  paidDaysOff     Int      @default(15) @map(\"paid_days_off\")\n  sickDaysOff     Int      @default(15) @map(\"sick_days_off\")\n  personalDaysOff Int      @default(15) @map(\"personal_days_off\")\n  createdAt       DateTime @default(now()) @map(\"created_at\")\n  updatedAt       DateTime @updatedAt @map(\"updated_at\")\n\n  dayOffs DayOff[]\n\n  @@map(\"users\")\n}\n\nmodel DayOff {\n  id        String       @id @default(cuid())\n  userId    String       @map(\"user_id\")\n  type      DayOffType\n  status    DayOffStatus @default(PENDING)\n  startDate DateTime     @map(\"start_date\")\n  endDate   DateTime     @map(\"end_date\")\n  reason    String?\n  createdAt DateTime     @default(now()) @map(\"created_at\")\n  updatedAt DateTime     @updatedAt @map(\"updated_at\")\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@map(\"day_offs\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"first_name\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"last_name\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"phone\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"UserRole\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":\"users\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"firstName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"first_name\"},{\"name\":\"lastName\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"last_name\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"phone\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"UserRole\"},{\"name\":\"paidDaysOff\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"paid_days_off\"},{\"name\":\"sickDaysOff\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"sick_days_off\"},{\"name\":\"personalDaysOff\",\"kind\":\"scalar\",\"type\":\"Int\",\"dbName\":\"personal_days_off\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"dayOffs\",\"kind\":\"object\",\"type\":\"DayOff\",\"relationName\":\"DayOffToUser\"}],\"dbName\":\"users\"},\"DayOff\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\",\"dbName\":\"user_id\"},{\"name\":\"type\",\"kind\":\"enum\",\"type\":\"DayOffType\"},{\"name\":\"status\",\"kind\":\"enum\",\"type\":\"DayOffStatus\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"start_date\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"end_date\"},{\"name\":\"reason\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"DayOffToUser\"}],\"dbName\":\"day_offs\"}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -185,6 +185,16 @@ export interface PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.dayOff`: Exposes CRUD operations for the **DayOff** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DayOffs
+    * const dayOffs = await prisma.dayOff.findMany()
+    * ```
+    */
+  get dayOff(): Prisma.DayOffDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

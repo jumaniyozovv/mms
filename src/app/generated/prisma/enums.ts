@@ -16,3 +16,21 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const DayOffType = {
+  PAID: 'PAID',
+  SICK: 'SICK',
+  PERSONAL: 'PERSONAL'
+} as const
+
+export type DayOffType = (typeof DayOffType)[keyof typeof DayOffType]
+
+
+export const DayOffStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type DayOffStatus = (typeof DayOffStatus)[keyof typeof DayOffStatus]

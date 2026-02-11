@@ -384,7 +384,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  DayOff: 'DayOff'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -400,7 +401,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user"
+    modelProps: "user" | "dayOff"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -478,6 +479,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DayOff: {
+      payload: Prisma.$DayOffPayload<ExtArgs>
+      fields: Prisma.DayOffFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DayOffFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DayOffFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>
+        }
+        findFirst: {
+          args: Prisma.DayOffFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DayOffFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>
+        }
+        findMany: {
+          args: Prisma.DayOffFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>[]
+        }
+        create: {
+          args: Prisma.DayOffCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>
+        }
+        createMany: {
+          args: Prisma.DayOffCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DayOffCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>[]
+        }
+        delete: {
+          args: Prisma.DayOffDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>
+        }
+        update: {
+          args: Prisma.DayOffUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>
+        }
+        deleteMany: {
+          args: Prisma.DayOffDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DayOffUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DayOffUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>[]
+        }
+        upsert: {
+          args: Prisma.DayOffUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffPayload>
+        }
+        aggregate: {
+          args: Prisma.DayOffAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDayOff>
+        }
+        groupBy: {
+          args: Prisma.DayOffGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DayOffGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DayOffCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DayOffCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -525,11 +600,29 @@ export const UserScalarFieldEnum = {
   lastName: 'lastName',
   phone: 'phone',
   role: 'role',
+  paidDaysOff: 'paidDaysOff',
+  sickDaysOff: 'sickDaysOff',
+  personalDaysOff: 'personalDaysOff',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const DayOffScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  reason: 'reason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DayOffScalarFieldEnum = (typeof DayOffScalarFieldEnum)[keyof typeof DayOffScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -546,6 +639,14 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -583,6 +684,20 @@ export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -597,16 +712,44 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'Int'
+ * Reference to a field of type 'DayOffType'
  */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+export type EnumDayOffTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOffType'>
     
 
 
 /**
- * Reference to a field of type 'Int[]'
+ * Reference to a field of type 'DayOffType[]'
  */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+export type ListEnumDayOffTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOffType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DayOffStatus'
+ */
+export type EnumDayOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOffStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DayOffStatus[]'
+ */
+export type ListEnumDayOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOffStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -705,6 +848,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  dayOff?: Prisma.DayOffOmit
 }
 
 /* Types for Logging */

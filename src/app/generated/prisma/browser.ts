@@ -22,3 +22,8 @@ export * from './enums';
  * 
  */
 export type User = Prisma.UserModel
+/**
+ * Model DayOff
+ * 
+ */
+export type DayOff = Prisma.DayOffModel

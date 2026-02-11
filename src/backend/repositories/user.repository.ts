@@ -68,6 +68,20 @@ export async function findUsers(
   return { data, total };
 }
 
+export async function findAllUsersWithLimits() {
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      paidDaysOff: true,
+      sickDaysOff: true,
+      personalDaysOff: true,
+    },
+    orderBy: { firstName: "asc" },
+  });
+}
+
 export async function updateUser(
   id: string,
   data: { firstName: string; lastName: string; phone?: string; role: "ADMIN" | "MANAGER" | "USER" }

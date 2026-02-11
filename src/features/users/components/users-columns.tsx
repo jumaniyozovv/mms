@@ -1,8 +1,8 @@
 "use client"
 
 import type { ColumnDef } from "@tanstack/react-table"
-import type { UserListItem } from "../types"
 import { format } from "date-fns"
+import type { UserListItem } from "../types"
 import { UserRowActions } from "./user-row-actions"
 
 export const usersColumns: ColumnDef<UserListItem, unknown>[] = [

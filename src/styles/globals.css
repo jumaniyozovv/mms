@@ -123,3 +123,62 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* FullCalendar theme overrides */
+.day-off-calendar {
+  --fc-border-color: var(--border);
+  --fc-button-bg-color: var(--secondary);
+  --fc-button-border-color: var(--border);
+  --fc-button-text-color: var(--secondary-foreground);
+  --fc-button-hover-bg-color: var(--accent);
+  --fc-button-hover-border-color: var(--border);
+  --fc-button-active-bg-color: var(--accent);
+  --fc-button-active-border-color: var(--border);
+  --fc-today-bg-color: var(--accent);
+  --fc-page-bg-color: var(--background);
+  --fc-neutral-bg-color: var(--muted);
+  --fc-event-border-color: transparent;
+}
+
+.day-off-calendar .fc-button {
+  border-radius: var(--radius-md) !important;
+  font-weight: 500;
+  box-shadow: none !important;
+}
+
+.day-off-calendar .fc-button-active {
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: var(--primary) !important;
+}
+
+.day-off-calendar .fc-toolbar-title {
+  color: var(--foreground);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.day-off-calendar .fc-col-header-cell-cushion,
+.day-off-calendar .fc-daygrid-day-number {
+  color: var(--foreground);
+}
+
+.day-off-calendar .fc-daygrid-day:hover {
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.day-off-calendar .fc-event {
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  padding: 1px 4px;
+}
+
+.fc-event-opacity-60 {
+  opacity: 0.6;
+}
+
+.fc-event-opacity-40 {
+  opacity: 0.4;
+}

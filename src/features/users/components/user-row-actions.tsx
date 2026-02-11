@@ -1,8 +1,8 @@
 "use client"
 
-import * as React from "react"
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react"
 
+import { useDisclosure } from "@/hooks/use-disclosure"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -21,8 +21,8 @@ interface UserRowActionsProps {
 
 export function UserRowActions({ user }: UserRowActionsProps) {
   const { user: currentUser } = useAuth()
-  const [editOpen, setEditOpen] = React.useState(false)
-  const [deleteOpen, setDeleteOpen] = React.useState(false)
+  const editDialog = useDisclosure()
+  const deleteDialog = useDisclosure()
 
   if (currentUser?.role !== "ADMIN") return null
 
@@ -38,13 +38,13 @@ export function UserRowActions({ user }: UserRowActionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setEditOpen(true)}>
+          <DropdownMenuItem onClick={editDialog.onOpen}>
             <Pencil className="size-4 mr-2" />
             Edit
           </DropdownMenuItem>
           {!isSelf && (
             <DropdownMenuItem
-              onClick={() => setDeleteOpen(true)}
+              onClick={deleteDialog.onOpen}
               className="text-destructive focus:text-destructive"
             >
               <Trash2 className="size-4 mr-2" />
@@ -54,9 +54,9 @@ export function UserRowActions({ user }: UserRowActionsProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <EditUserDialog user={user} open={editOpen} onOpenChange={setEditOpen} />
+      <EditUserDialog user={user} open={editDialog.open} onOpenChange={editDialog.onOpenChange} />
       {!isSelf && (
-        <DeleteUserDialog user={user} open={deleteOpen} onOpenChange={setDeleteOpen} />
+        <DeleteUserDialog user={user} open={deleteDialog.open} onOpenChange={deleteDialog.onOpenChange} />
       )}
     </>
   )

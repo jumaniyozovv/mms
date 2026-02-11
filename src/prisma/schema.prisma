@@ -13,6 +13,18 @@ enum UserRole {
   USER
 }
 
+enum DayOffType {
+  PAID
+  SICK
+  PERSONAL
+}
+
+enum DayOffStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
@@ -21,8 +33,29 @@ model User {
   lastName  String   @map("last_name")
   phone     String  @map("phone")
   role      UserRole @default(USER)
+  paidDaysOff     Int @default(15) @map("paid_days_off")
+  sickDaysOff     Int @default(15) @map("sick_days_off")
+  personalDaysOff Int @default(15) @map("personal_days_off")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  dayOffs DayOff[]
+
   @@map("users")
+}
+
+model DayOff {
+  id        String       @id @default(cuid())
+  userId    String       @map("user_id")
+  type      DayOffType
+  status    DayOffStatus @default(PENDING)
+  startDate DateTime     @map("start_date")
+  endDate   DateTime     @map("end_date")
+  reason    String?
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("day_offs")
 }
