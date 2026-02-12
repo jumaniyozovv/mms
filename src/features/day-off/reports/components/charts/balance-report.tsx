@@ -75,7 +75,7 @@ export function BalanceReport() {
                         </RadialBarChart>
                       </ChartContainer>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <p className="text-lg font-bold tabular-nums">
+                        <p className="text-lg font-bold tabular-nums text-muted-foreground">
                           {used}/{total}
                         </p>
                       </div>

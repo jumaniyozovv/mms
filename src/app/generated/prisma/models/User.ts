@@ -281,6 +281,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   dayOffs?: Prisma.DayOffListRelationFilter
+  approvedDayOffs?: Prisma.DayOffListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -297,6 +298,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   dayOffs?: Prisma.DayOffOrderByRelationAggregateInput
+  approvedDayOffs?: Prisma.DayOffOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -316,6 +318,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   dayOffs?: Prisma.DayOffListRelationFilter
+  approvedDayOffs?: Prisma.DayOffListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -370,6 +373,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   dayOffs?: Prisma.DayOffCreateNestedManyWithoutUserInput
+  approvedDayOffs?: Prisma.DayOffCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -386,6 +390,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   dayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutUserInput
+  approvedDayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUpdateInput = {
@@ -402,6 +407,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOffs?: Prisma.DayOffUpdateManyWithoutUserNestedInput
+  approvedDayOffs?: Prisma.DayOffUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -418,6 +424,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutUserNestedInput
+  approvedDayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -527,6 +534,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -553,12 +565,28 @@ export type UserCreateNestedOneWithoutDayOffsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutApprovedDayOffsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedDayOffsInput, Prisma.UserUncheckedCreateWithoutApprovedDayOffsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedDayOffsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutDayOffsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutDayOffsInput, Prisma.UserUncheckedCreateWithoutDayOffsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutDayOffsInput
   upsert?: Prisma.UserUpsertWithoutDayOffsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDayOffsInput, Prisma.UserUpdateWithoutDayOffsInput>, Prisma.UserUncheckedUpdateWithoutDayOffsInput>
+}
+
+export type UserUpdateOneWithoutApprovedDayOffsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprovedDayOffsInput, Prisma.UserUncheckedCreateWithoutApprovedDayOffsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprovedDayOffsInput
+  upsert?: Prisma.UserUpsertWithoutApprovedDayOffsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedDayOffsInput, Prisma.UserUpdateWithoutApprovedDayOffsInput>, Prisma.UserUncheckedUpdateWithoutApprovedDayOffsInput>
 }
 
 export type UserCreateWithoutDayOffsInput = {
@@ -574,6 +602,7 @@ export type UserCreateWithoutDayOffsInput = {
   personalDaysOff?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedDayOffs?: Prisma.DayOffCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserUncheckedCreateWithoutDayOffsInput = {
@@ -589,11 +618,49 @@ export type UserUncheckedCreateWithoutDayOffsInput = {
   personalDaysOff?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  approvedDayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutApprovedByInput
 }
 
 export type UserCreateOrConnectWithoutDayOffsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutDayOffsInput, Prisma.UserUncheckedCreateWithoutDayOffsInput>
+}
+
+export type UserCreateWithoutApprovedDayOffsInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phone: string
+  role?: $Enums.UserRole
+  paidDaysOff?: number
+  sickDaysOff?: number
+  personalDaysOff?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dayOffs?: Prisma.DayOffCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutApprovedDayOffsInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phone: string
+  role?: $Enums.UserRole
+  paidDaysOff?: number
+  sickDaysOff?: number
+  personalDaysOff?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutApprovedDayOffsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedDayOffsInput, Prisma.UserUncheckedCreateWithoutApprovedDayOffsInput>
 }
 
 export type UserUpsertWithoutDayOffsInput = {
@@ -620,6 +687,7 @@ export type UserUpdateWithoutDayOffsInput = {
   personalDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedDayOffs?: Prisma.DayOffUpdateManyWithoutApprovedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDayOffsInput = {
@@ -635,6 +703,50 @@ export type UserUncheckedUpdateWithoutDayOffsInput = {
   personalDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  approvedDayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUpsertWithoutApprovedDayOffsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprovedDayOffsInput, Prisma.UserUncheckedUpdateWithoutApprovedDayOffsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprovedDayOffsInput, Prisma.UserUncheckedCreateWithoutApprovedDayOffsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprovedDayOffsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprovedDayOffsInput, Prisma.UserUncheckedUpdateWithoutApprovedDayOffsInput>
+}
+
+export type UserUpdateWithoutApprovedDayOffsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  paidDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  sickDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  personalDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dayOffs?: Prisma.DayOffUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprovedDayOffsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  paidDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  sickDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  personalDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -644,10 +756,12 @@ export type UserUncheckedUpdateWithoutDayOffsInput = {
 
 export type UserCountOutputType = {
   dayOffs: number
+  approvedDayOffs: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dayOffs?: boolean | UserCountOutputTypeCountDayOffsArgs
+  approvedDayOffs?: boolean | UserCountOutputTypeCountApprovedDayOffsArgs
 }
 
 /**
@@ -667,6 +781,13 @@ export type UserCountOutputTypeCountDayOffsArgs<ExtArgs extends runtime.Types.Ex
   where?: Prisma.DayOffWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprovedDayOffsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DayOffWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -682,6 +803,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   dayOffs?: boolean | Prisma.User$dayOffsArgs<ExtArgs>
+  approvedDayOffs?: boolean | Prisma.User$approvedDayOffsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -733,6 +855,7 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "firstName" | "lastName" | "phone" | "role" | "paidDaysOff" | "sickDaysOff" | "personalDaysOff" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dayOffs?: boolean | Prisma.User$dayOffsArgs<ExtArgs>
+  approvedDayOffs?: boolean | Prisma.User$approvedDayOffsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -742,6 +865,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     dayOffs: Prisma.$DayOffPayload<ExtArgs>[]
+    approvedDayOffs: Prisma.$DayOffPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1151,6 +1275,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   dayOffs<T extends Prisma.User$dayOffsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dayOffsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DayOffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approvedDayOffs<T extends Prisma.User$approvedDayOffsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedDayOffsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DayOffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1583,6 +1708,30 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
  * User.dayOffs
  */
 export type User$dayOffsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DayOff
+   */
+  select?: Prisma.DayOffSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DayOff
+   */
+  omit?: Prisma.DayOffOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DayOffInclude<ExtArgs> | null
+  where?: Prisma.DayOffWhereInput
+  orderBy?: Prisma.DayOffOrderByWithRelationInput | Prisma.DayOffOrderByWithRelationInput[]
+  cursor?: Prisma.DayOffWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DayOffScalarFieldEnum | Prisma.DayOffScalarFieldEnum[]
+}
+
+/**
+ * User.approvedDayOffs
+ */
+export type User$approvedDayOffsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the DayOff
    */

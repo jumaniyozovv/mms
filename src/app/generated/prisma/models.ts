@@ -9,5 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/DayOffConfig'
 export type * from './models/DayOff'
+export type * from './models/Holiday'
 export type * from './commonInputTypes'

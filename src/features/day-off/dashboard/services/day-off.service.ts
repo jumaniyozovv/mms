@@ -5,6 +5,7 @@ import type {
   DayOffCalendarFilters,
   UpdateDayOffStatusInput,
   DayOffUsage,
+  DashboardStats,
 } from "../types";
 
 export function listDayOffs(
@@ -34,4 +35,8 @@ export function getDayOffUsage(): Promise<DayOffUsage> {
 
 export function getMyPendingDayOffs(): Promise<DayOffListItem[]> {
   return apiClient.get<DayOffListItem[]>("/day-off/my-pending");
+}
+
+export function getDashboardStats(): Promise<DashboardStats> {
+  return apiClient.get<DashboardStats>("/dashboard/stats");
 }

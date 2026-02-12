@@ -34,7 +34,7 @@ function toCalendarEvents(dayOffs: DayOffListItem[]): EventInput[] {
     return {
       id: d.id,
       title: `${d.userName}`,
-      start: d.startDate,
+      start: format(new Date(d.startDate), "yyyy-MM-dd"),
       end: format(addDays(new Date(d.endDate), 1), "yyyy-MM-dd"),
       backgroundColor: color,
       borderColor: color,
@@ -79,24 +79,26 @@ export function DayOffCalendar() {
   }
 
   return (
-    <div className="day-off-calendar">
-      <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        events={events}
-        datesSet={handleDatesSet}
-        dateClick={handleDateClick}
-        eventClick={handleEventClick}
-        headerToolbar={{
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth",
-        }}
-        height="auto"
-        dayMaxEvents={3}
-      />
+    <div className="day-off-calendar flex h-full flex-col">
+      <div className="flex-1 min-h-0">
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          events={events}
+          datesSet={handleDatesSet}
+          dateClick={handleDateClick}
+          eventClick={handleEventClick}
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth",
+          }}
+          height="100%"
+          dayMaxEvents={3}
+        />
+      </div>
 
-      <div className="flex items-center gap-4 mt-3 text-xs text-muted-foreground">
+      <div className="flex items-center gap-4 mt-3 shrink-0 text-xs text-muted-foreground">
         {Object.entries(TYPE_COLORS).map(([type, color]) => (
           <div key={type} className="flex items-center gap-1.5">
             <span className="size-2.5 rounded-full" style={{ background: color }} />

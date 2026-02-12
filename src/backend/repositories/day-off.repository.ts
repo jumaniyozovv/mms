@@ -1,8 +1,10 @@
 import { prisma } from "@/backend/lib/prisma";
+import { format, addDays } from "date-fns";
 import type { DayOff, DayOffType, DayOffStatus } from "@/app/generated/prisma/client";
 
 export type DayOffWithUser = DayOff & {
   user: { firstName: string; lastName: string };
+  approvedBy: { firstName: string; lastName: string } | null;
 };
 
 export async function createDayOff(data: {
@@ -20,14 +22,20 @@ export async function createDayOff(data: {
       endDate: data.endDate,
       reason: data.reason,
     },
-    include: { user: { select: { firstName: true, lastName: true } } },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
   });
 }
 
 export async function findDayOffById(id: string): Promise<DayOffWithUser | null> {
   return prisma.dayOff.findUnique({
     where: { id },
-    include: { user: { select: { firstName: true, lastName: true } } },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
   });
 }
 
@@ -45,19 +53,26 @@ export async function findDayOffsInRange(
         ? { status: { not: "REJECTED" } }
         : { OR: [{ status: "APPROVED" }, { status: "PENDING", userId }] }),
     },
-    include: { user: { select: { firstName: true, lastName: true } } },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
     orderBy: { startDate: "asc" },
   });
 }
 
 export async function updateDayOffStatus(
   id: string,
-  status: DayOffStatus
+  status: DayOffStatus,
+  approverId: string
 ): Promise<DayOffWithUser> {
   return prisma.dayOff.update({
     where: { id },
-    data: { status },
-    include: { user: { select: { firstName: true, lastName: true } } },
+    data: { status, approvedAt: new Date(), approvedById: approverId },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
   });
 }
 
@@ -70,7 +85,10 @@ export async function findPendingByUserId(
 ): Promise<DayOffWithUser[]> {
   return prisma.dayOff.findMany({
     where: { userId, status: "PENDING" },
-    include: { user: { select: { firstName: true, lastName: true } } },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
     orderBy: { startDate: "asc" },
   });
 }
@@ -78,7 +96,10 @@ export async function findPendingByUserId(
 export async function findAllPending(): Promise<DayOffWithUser[]> {
   return prisma.dayOff.findMany({
     where: { status: "PENDING" },
-    include: { user: { select: { firstName: true, lastName: true } } },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
     orderBy: { startDate: "asc" },
   });
 }
@@ -96,15 +117,45 @@ export async function findByUserId(
       startDate: { lte: endOfYear },
       endDate: { gte: startOfYear },
     },
-    include: { user: { select: { firstName: true, lastName: true } } },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
     orderBy: { startDate: "desc" },
+  });
+}
+
+export async function countDayOffsInMonth(
+  year: number,
+  month: number
+): Promise<number> {
+  const startOfMonth = new Date(year, month, 1);
+  const endOfMonth = new Date(year, month + 1, 0, 23, 59, 59, 999);
+
+  return prisma.dayOff.count({
+    where: {
+      createdAt: { gte: startOfMonth, lte: endOfMonth },
+    },
+  });
+}
+
+export async function countDayOffsToday(): Promise<number> {
+  const now = new Date();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+  return prisma.dayOff.count({
+    where: {
+      createdAt: { gte: startOfDay, lte: endOfDay },
+    },
   });
 }
 
 export async function countUsedDaysByType(
   userId: string,
   type: DayOffType,
-  year: number
+  year: number,
+  holidayDates?: Set<string>
 ): Promise<number> {
   const startOfYear = new Date(year, 0, 1);
   const endOfYear = new Date(year, 11, 31);
@@ -124,8 +175,15 @@ export async function countUsedDaysByType(
   for (const d of dayOffs) {
     const start = d.startDate < startOfYear ? startOfYear : d.startDate;
     const end = d.endDate > endOfYear ? endOfYear : d.endDate;
-    const diffMs = end.getTime() - start.getTime();
-    totalDays += Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+
+    let current = start;
+    while (current <= end) {
+      const dateStr = format(current, "yyyy-MM-dd");
+      if (!holidayDates || !holidayDates.has(dateStr)) {
+        totalDays++;
+      }
+      current = addDays(current, 1);
+    }
   }
 
   return totalDays;

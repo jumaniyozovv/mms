@@ -5,5 +5,6 @@ export {
   useDeleteDayOff,
   useDayOffUsage,
   useMyPendingDayOffs,
+  useDashboardStats,
   dayOffKeys,
 } from "./use-day-off";

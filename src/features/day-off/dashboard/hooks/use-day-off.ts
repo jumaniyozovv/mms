@@ -10,6 +10,7 @@ import {
   deleteDayOff,
   getDayOffUsage,
   getMyPendingDayOffs,
+  getDashboardStats,
 } from "../services";
 import type {
   DayOffCalendarFilters,
@@ -22,6 +23,7 @@ export const dayOffKeys = {
   list: (filters: DayOffCalendarFilters) => [...dayOffKeys.all, "list", filters] as const,
   usage: () => [...dayOffKeys.all, "usage"] as const,
   myPending: () => [...dayOffKeys.all, "my-pending"] as const,
+  dashboardStats: () => ["dashboard-stats"] as const,
 };
 
 export function useDayOffs(filters: DayOffCalendarFilters | null) {
@@ -78,5 +80,12 @@ export function useMyPendingDayOffs() {
     queryKey: dayOffKeys.myPending(),
     queryFn: getMyPendingDayOffs,
     refetchInterval: 30_000,
+  });
+}
+
+export function useDashboardStats() {
+  return useQuery({
+    queryKey: dayOffKeys.dashboardStats(),
+    queryFn: getDashboardStats,
   });
 }

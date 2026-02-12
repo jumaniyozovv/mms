@@ -35,7 +35,7 @@ export function DetailedReport() {
     : []
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <h1 className="text-2xl font-bold tracking-tight">Detailed Report</h1>
 
       {usage && (
@@ -46,7 +46,7 @@ export function DetailedReport() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig} className="h-64 w-full">
+            <ChartContainer config={chartConfig} className="h-52 w-full">
               <BarChart data={chartData}>
                 <CartesianGrid vertical={false} />
                 <XAxis dataKey="type" tickLine={false} axisLine={false} />

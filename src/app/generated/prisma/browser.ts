@@ -23,7 +23,17 @@ export * from './enums';
  */
 export type User = Prisma.UserModel
 /**
+ * Model DayOffConfig
+ * 
+ */
+export type DayOffConfig = Prisma.DayOffConfigModel
+/**
  * Model DayOff
  * 
  */
 export type DayOff = Prisma.DayOffModel
+/**
+ * Model Holiday
+ * 
+ */
+export type Holiday = Prisma.HolidayModel

@@ -4,6 +4,7 @@ import {
   updateUserPassword,
   createUser,
 } from "@/backend/repositories/user.repository";
+import { getConfig } from "@/backend/repositories/day-off-config.repository";
 import {
   createRefreshToken,
   findRefreshToken,
@@ -58,6 +59,7 @@ export async function register(
   }
 
   const hashedPassword = await hashPassword(input.password);
+  const dayOffConfig = await getConfig();
 
   const user = await createUser({
     email: input.email,
@@ -66,6 +68,9 @@ export async function register(
     lastName: input.lastName,
     phone: input.phone,
     role: "USER",
+    paidDaysOff: dayOffConfig.paidDaysOff,
+    sickDaysOff: dayOffConfig.sickDaysOff,
+    personalDaysOff: dayOffConfig.personalDaysOff,
   });
 
   const payload: JwtPayload = {

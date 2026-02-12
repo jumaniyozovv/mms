@@ -15,6 +15,10 @@ function calcDays(startDate: string, endDate: string): number {
 
 export const detailedReportColumns: ColumnDef<DayOffListItem, unknown>[] = [
   {
+    accessorKey: "#",
+    header: "#",
+    cell: (c) => c.row.index + 1
+  }, {
     accessorKey: "userName",
     header: "Employee",
   },

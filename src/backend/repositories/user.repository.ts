@@ -31,6 +31,9 @@ export async function createUser(data: {
   lastName: string;
   phone: string;
   role: "ADMIN" | "MANAGER" | "USER";
+  paidDaysOff?: number;
+  sickDaysOff?: number;
+  personalDaysOff?: number;
 }): Promise<User> {
   return prisma.user.create({
     data: {
@@ -40,6 +43,9 @@ export async function createUser(data: {
       lastName: data.lastName,
       phone: data.phone,
       role: data.role || "USER",
+      ...(data.paidDaysOff !== undefined && { paidDaysOff: data.paidDaysOff }),
+      ...(data.sickDaysOff !== undefined && { sickDaysOff: data.sickDaysOff }),
+      ...(data.personalDaysOff !== undefined && { personalDaysOff: data.personalDaysOff }),
     },
   });
 }

@@ -7,12 +7,15 @@ import { UserRowActions } from "./user-row-actions"
 
 export const usersColumns: ColumnDef<UserListItem, unknown>[] = [
   {
-    accessorKey: "firstName",
-    header: "First Name",
+    accessorKey: "#",
+    header: "#",
+    cell: (c) => c.row.index + 1
   },
   {
-    accessorKey: "lastName",
-    header: "Last Name",
+    accessorKey: "fullName",
+    header: "Full Name",
+    cell: ({ row }) =>
+      <p>{row.original.firstName} {row.original.lastName}</p>
   },
   {
     accessorKey: "email",

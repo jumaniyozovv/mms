@@ -5,4 +5,5 @@ export {
   deleteDayOff,
   getDayOffUsage,
   getMyPendingDayOffs,
+  getDashboardStats,
 } from "./day-off.service";

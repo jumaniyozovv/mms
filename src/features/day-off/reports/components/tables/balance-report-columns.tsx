@@ -5,6 +5,11 @@ import type { UserDayOffBalance } from "@/features/day-off/dashboard/types"
 
 export const balanceReportColumns: ColumnDef<UserDayOffBalance, unknown>[] = [
   {
+    accessorKey: "#",
+    header: "#",
+    cell: (c) => c.row.index + 1
+  },
+  {
     accessorKey: "userName",
     header: "Employee",
   },

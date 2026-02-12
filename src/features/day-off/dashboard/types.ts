@@ -1,3 +1,9 @@
+export interface DashboardStats {
+  totalUsers: number;
+  monthlyRequests: number;
+  todaysRequests: number;
+}
+
 export interface DayOffListItem {
   id: string;
   userId: string;
@@ -8,6 +14,8 @@ export interface DayOffListItem {
   endDate: string;
   reason: string | null;
   createdAt: string;
+  approvedAt: string | null;
+  approverName: string | null;
 }
 
 export interface CreateDayOffInput {

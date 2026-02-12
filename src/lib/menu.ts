@@ -37,7 +37,7 @@ export const menuItems: MenuItem[] = [
         title: "Dashboard",
         icon: LayoutDashboardIcon,
         roles: ["admin", "manager", "user"],
-        path: "/day-off",
+        path: "/day-off/dashboard",
       },
       {
         title: "Reports",

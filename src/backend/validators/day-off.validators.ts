@@ -21,6 +21,13 @@ export const updateDayOffStatusSchema = z.object({
   status: z.enum(["APPROVED", "REJECTED"]),
 });
 
+export const updateDayOffConfigSchema = z.object({
+  paidDaysOff: z.number().int().min(0).max(365),
+  sickDaysOff: z.number().int().min(0).max(365),
+  personalDaysOff: z.number().int().min(0).max(365),
+});
+
 export type CreateDayOffSchemaInput = z.infer<typeof createDayOffSchema>;
 export type DayOffCalendarFilterInput = z.infer<typeof dayOffCalendarFilterSchema>;
 export type UpdateDayOffStatusSchemaInput = z.infer<typeof updateDayOffStatusSchema>;
+export type UpdateDayOffConfigInput = z.infer<typeof updateDayOffConfigSchema>;

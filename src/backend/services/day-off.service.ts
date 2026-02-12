@@ -11,15 +11,22 @@ import {
   type DayOffWithUser,
 } from "@/backend/repositories/day-off.repository";
 import {
+  getConfig,
+  updateConfig,
+} from "@/backend/repositories/day-off-config.repository";
+import {
   findUserById,
   findAllUsersWithLimits,
 } from "@/backend/repositories/user.repository";
+import { getHolidayDatesForYear } from "@/backend/repositories/holiday.repository";
+import { format, addDays } from "date-fns";
 import type {
   DayOffListItem,
   CreateDayOffInput,
   DayOffCalendarFilters,
   UpdateDayOffStatusInput,
   DayOffUsage,
+  DayOffConfigData,
   UserDayOffBalance,
 } from "@/backend/types/day-off.types";
 
@@ -34,6 +41,10 @@ function toDayOffListItem(dayOff: DayOffWithUser): DayOffListItem {
     endDate: dayOff.endDate,
     reason: dayOff.reason,
     createdAt: dayOff.createdAt,
+    approvedAt: dayOff.approvedAt,
+    approverName: dayOff.approvedBy
+      ? `${dayOff.approvedBy.firstName} ${dayOff.approvedBy.lastName}`
+      : null,
   };
 }
 
@@ -48,10 +59,19 @@ export async function createNewDayOff(
   const endDate = new Date(input.endDate);
   const year = startDate.getFullYear();
 
-  const requestedDays =
-    Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+  const holidayDates = await getHolidayDatesForYear(year);
 
-  const usedDays = await countUsedDaysByType(userId, input.type, year);
+  let requestedDays = 0;
+  let current = startDate;
+  while (current <= endDate) {
+    const dateStr = format(current, "yyyy-MM-dd");
+    if (!holidayDates.has(dateStr)) {
+      requestedDays++;
+    }
+    current = addDays(current, 1);
+  }
+
+  const usedDays = await countUsedDaysByType(userId, input.type, year, holidayDates);
 
   let limit: number;
   switch (input.type) {
@@ -98,13 +118,14 @@ export async function listDayOffs(
 
 export async function updateDayOffStatusById(
   id: string,
-  input: UpdateDayOffStatusInput
+  input: UpdateDayOffStatusInput,
+  approverId: string
 ): Promise<{ data?: DayOffListItem; error?: string }> {
   const dayOff = await findDayOffById(id);
   if (!dayOff) return { error: "Day off not found" };
   if (dayOff.status !== "PENDING") return { error: "Can only update pending requests" };
 
-  const updated = await updateDayOffStatus(id, input.status);
+  const updated = await updateDayOffStatus(id, input.status, approverId);
   return { data: toDayOffListItem(updated) };
 }
 
@@ -141,13 +162,14 @@ export async function getUserDayOffReport(
 
 export async function getAllUsersBalance(year: number): Promise<UserDayOffBalance[]> {
   const users = await findAllUsersWithLimits();
+  const holidayDates = await getHolidayDatesForYear(year);
 
   const balances = await Promise.all(
     users.map(async (user) => {
       const [paidUsed, sickUsed, personalUsed] = await Promise.all([
-        countUsedDaysByType(user.id, "PAID", year),
-        countUsedDaysByType(user.id, "SICK", year),
-        countUsedDaysByType(user.id, "PERSONAL", year),
+        countUsedDaysByType(user.id, "PAID", year, holidayDates),
+        countUsedDaysByType(user.id, "SICK", year, holidayDates),
+        countUsedDaysByType(user.id, "PERSONAL", year, holidayDates),
       ]);
 
       return {
@@ -173,11 +195,12 @@ export async function getUserDayOffUsage(userId: string): Promise<DayOffUsage | 
   if (!user) return null;
 
   const year = new Date().getFullYear();
+  const holidayDates = await getHolidayDatesForYear(year);
 
   const [paidUsed, sickUsed, personalUsed] = await Promise.all([
-    countUsedDaysByType(userId, "PAID", year),
-    countUsedDaysByType(userId, "SICK", year),
-    countUsedDaysByType(userId, "PERSONAL", year),
+    countUsedDaysByType(userId, "PAID", year, holidayDates),
+    countUsedDaysByType(userId, "SICK", year, holidayDates),
+    countUsedDaysByType(userId, "PERSONAL", year, holidayDates),
   ]);
 
   return {
@@ -187,5 +210,23 @@ export async function getUserDayOffUsage(userId: string): Promise<DayOffUsage | 
     paidUsed,
     sickUsed,
     personalUsed,
+  };
+}
+
+export async function getDayOffConfig(): Promise<DayOffConfigData> {
+  const config = await getConfig();
+  return {
+    paidDaysOff: config.paidDaysOff,
+    sickDaysOff: config.sickDaysOff,
+    personalDaysOff: config.personalDaysOff,
+  };
+}
+
+export async function updateDayOffConfig(data: DayOffConfigData): Promise<DayOffConfigData> {
+  const config = await updateConfig(data);
+  return {
+    paidDaysOff: config.paidDaysOff,
+    sickDaysOff: config.sickDaysOff,
+    personalDaysOff: config.personalDaysOff,
   };
 }

@@ -52,7 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  DayOff: 'DayOff'
+  DayOffConfig: 'DayOffConfig',
+  DayOff: 'DayOff',
+  Holiday: 'Holiday'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -89,6 +91,16 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const DayOffConfigScalarFieldEnum = {
+  id: 'id',
+  paidDaysOff: 'paidDaysOff',
+  sickDaysOff: 'sickDaysOff',
+  personalDaysOff: 'personalDaysOff'
+} as const
+
+export type DayOffConfigScalarFieldEnum = (typeof DayOffConfigScalarFieldEnum)[keyof typeof DayOffConfigScalarFieldEnum]
+
+
 export const DayOffScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -98,10 +110,22 @@ export const DayOffScalarFieldEnum = {
   endDate: 'endDate',
   reason: 'reason',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  approvedAt: 'approvedAt',
+  approvedById: 'approvedById'
 } as const
 
 export type DayOffScalarFieldEnum = (typeof DayOffScalarFieldEnum)[keyof typeof DayOffScalarFieldEnum]
+
+
+export const HolidayScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  date: 'date',
+  recurring: 'recurring',
+  createdAt: 'createdAt'
+} as const
+
+export type HolidayScalarFieldEnum = (typeof HolidayScalarFieldEnum)[keyof typeof HolidayScalarFieldEnum]
 
 
 export const SortOrder = {

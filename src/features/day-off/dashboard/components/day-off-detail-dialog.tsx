@@ -1,10 +1,10 @@
 "use client"
 
 import { format } from "date-fns"
+import { CalendarDays, UserCheck } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
@@ -13,10 +13,12 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog"
+import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useAuth } from "@/shared/providers/AuthProvider"
 import { useUpdateDayOffStatus, useDeleteDayOff } from "../hooks"
 import type { DayOffListItem } from "../types"
-import { DayOffStatusBadge } from "./badge"
+import { DayOffStatusBadge, DayOffTypeBadge } from "./badge"
 
 interface DayOffDetailDialogProps {
   open: boolean
@@ -24,16 +26,12 @@ interface DayOffDetailDialogProps {
   dayOff: DayOffListItem | null
 }
 
-const statusVariant: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-  PENDING: "secondary",
-  APPROVED: "default",
-  REJECTED: "destructive",
-}
-
-const typeLabel: Record<string, string> = {
-  PAID: "Paid",
-  SICK: "Sick",
-  PERSONAL: "Personal",
+function getInitials(name: string): string {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
 }
 
 export function DayOffDetailDialog({
@@ -42,8 +40,10 @@ export function DayOffDetailDialog({
   dayOff,
 }: DayOffDetailDialogProps) {
   const { user } = useAuth()
-  const {mutate:updateStatusMutation,isPending:updatePending} = useUpdateDayOffStatus()
-  const {mutate:deleteMutation,isPending:deletePending} = useDeleteDayOff()
+  const { mutate: updateStatusMutation, isPending: updatePending } =
+    useUpdateDayOffStatus()
+  const { mutate: deleteMutation, isPending: deletePending } =
+    useDeleteDayOff()
 
   if (!dayOff) return null
 
@@ -105,41 +105,64 @@ export function DayOffDetailDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Employee</span>
-            <span className="text-sm">{dayOff.userName}</span>
+        {/* Employee & Status */}
+        <div className="flex items-center gap-3">
+          <Avatar>
+            <AvatarFallback>{getInitials(dayOff.userName)}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate">{dayOff.userName}</p>
+            <p className="text-xs text-muted-foreground">
+              Submitted {format(new Date(dayOff.createdAt), "MMM d, yyyy")}
+            </p>
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Type</span>
-            <span className="text-sm">{typeLabel[dayOff.type]}</span>
+          <div className="flex items-center gap-2">
+            <DayOffTypeBadge type={dayOff.type} />
+            <DayOffStatusBadge status={dayOff.status} />
           </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Status</span>
-            <DayOffStatusBadge status={dayOff.status}/>
-              
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Start Date</span>
-            <span className="text-sm">
-              {format(new Date(dayOff.startDate), "MMM d, yyyy")}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">End Date</span>
-            <span className="text-sm">
-              {format(new Date(dayOff.endDate), "MMM d, yyyy")}
-            </span>
-          </div>
-          {dayOff.reason && (
-            <div>
-              <span className="text-sm font-medium">Reason</span>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {dayOff.reason}
-              </p>
-            </div>
-          )}
         </div>
+
+        <Separator />
+
+        {/* Dates */}
+        <div className="flex items-start gap-3">
+          <CalendarDays className="size-4 mt-0.5 text-muted-foreground shrink-0" />
+          <div className="text-sm">
+            <span>{format(new Date(dayOff.startDate), "MMM d, yyyy")}</span>
+            <span className="text-muted-foreground mx-1.5">&mdash;</span>
+            <span>{format(new Date(dayOff.endDate), "MMM d, yyyy")}</span>
+          </div>
+        </div>
+
+        {/* Reason */}
+        {dayOff.reason && (
+          <div className="rounded-md bg-muted/50 px-3 py-2">
+            <p className="text-xs font-medium text-muted-foreground mb-1">
+              Reason
+            </p>
+            <p className="text-sm">{dayOff.reason}</p>
+          </div>
+        )}
+
+        {/* Approval Info */}
+        {dayOff.approverName && dayOff.approvedAt && (
+          <>
+            <Separator />
+            <div className="flex items-center gap-3">
+              <UserCheck className="size-4 text-muted-foreground shrink-0" />
+              <div className="text-sm">
+                <span className="text-muted-foreground">
+                  {dayOff.status === "APPROVED" ? "Approved" : "Rejected"} by
+                </span>{" "}
+                <span className="font-medium">{dayOff.approverName}</span>
+                <span className="text-muted-foreground">
+                  {" "}
+                  on {format(new Date(dayOff.approvedAt), "MMM d, yyyy 'at' HH:mm")}
+                </span>
+              </div>
+            </div>
+          </>
+        )}
 
         <DialogFooter className="gap-2">
           {isAdmin && isStatusPending && (

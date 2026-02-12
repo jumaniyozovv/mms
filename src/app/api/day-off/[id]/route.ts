@@ -15,7 +15,7 @@ import {
 
 export const PUT = withRole(
   "ADMIN",
-  async (request: NextRequest) => {
+  async (request: NextRequest, { user }) => {
     try {
       const id = request.nextUrl.pathname.split("/").pop()!;
       const body = await request.json();
@@ -25,7 +25,7 @@ export const PUT = withRole(
         return validationErrorResponse(formatZodErrors(result.error));
       }
 
-      const { data, error } = await updateDayOffStatusById(id, result.data);
+      const { data, error } = await updateDayOffStatusById(id, result.data, user.userId);
       if (error) {
         return errorResponse(error);
       }

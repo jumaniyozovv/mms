@@ -34,28 +34,50 @@ model User {
   phone     String  @map("phone")
   role      UserRole @default(USER)
   paidDaysOff     Int @default(15) @map("paid_days_off")
-  sickDaysOff     Int @default(15) @map("sick_days_off")
-  personalDaysOff Int @default(15) @map("personal_days_off")
+  sickDaysOff     Int @default(5) @map("sick_days_off")
+  personalDaysOff Int @default(10) @map("personal_days_off")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  dayOffs DayOff[]
+  dayOffs         DayOff[] @relation("UserDayOffs")
+  approvedDayOffs DayOff[] @relation("ApprovedDayOffs")
 
   @@map("users")
 }
 
-model DayOff {
-  id        String       @id @default(cuid())
-  userId    String       @map("user_id")
-  type      DayOffType
-  status    DayOffStatus @default(PENDING)
-  startDate DateTime     @map("start_date")
-  endDate   DateTime     @map("end_date")
-  reason    String?
-  createdAt DateTime     @default(now()) @map("created_at")
-  updatedAt DateTime     @updatedAt @map("updated_at")
+model DayOffConfig {
+  id              String @id @default(cuid())
+  paidDaysOff     Int    @default(15) @map("paid_days_off")
+  sickDaysOff     Int    @default(5) @map("sick_days_off")
+  personalDaysOff Int    @default(10) @map("personal_days_off")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("day_off_config")
+}
+
+model DayOff {
+  id           String       @id @default(cuid())
+  userId       String       @map("user_id")
+  type         DayOffType
+  status       DayOffStatus @default(PENDING)
+  startDate    DateTime     @map("start_date")
+  endDate      DateTime     @map("end_date")
+  reason       String?
+  createdAt    DateTime     @default(now()) @map("created_at")
+  approvedAt   DateTime?    @map("approved_at")
+  approvedById String?      @map("approved_by_id")
+
+  user       User  @relation("UserDayOffs", fields: [userId], references: [id], onDelete: Cascade)
+  approvedBy User? @relation("ApprovedDayOffs", fields: [approvedById], references: [id], onDelete: SetNull)
 
   @@map("day_offs")
+}
+
+model Holiday {
+  id        String   @id @default(cuid())
+  name      String
+  date      DateTime
+  recurring Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("holidays")
 }

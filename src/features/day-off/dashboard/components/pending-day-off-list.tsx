@@ -38,28 +38,31 @@ export function PendingDayOffList() {
 
   return (
     <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
+      <CardHeader>
+        <CardTitle className="text-sm font-medium">Pending Requests ({pending?.length})</CardTitle>
       </CardHeader>
       <CardContent>
         {!pending?.length ? (
           <p className="text-muted-foreground text-sm">No pending requests</p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-1">
             {pending.map((item) => (
-              <div key={item.id} className="flex items-start justify-between gap-2">
+              <div key={item.id} className="flex items-start justify-between gap-2 border-b last:border-none">
                 <div className="min-w-0 space-y-0.5">
                   <div className="flex items-center gap-1.5">
-                    <DayOffTypeBadge type={item.type} />
                     {isAdmin && (
                       <span className="text-xs font-medium truncate">{item.userName}</span>
                     )}
                   </div>
+                 <div className=" flex gap-2 py-0.5
+                 ">
                   <p className="text-muted-foreground text-xs truncate">
                     {format(new Date(item.startDate), "MMM d")}
                     {" – "}
                     {format(new Date(item.endDate), "MMM d")}
-                  </p>
+                  </p> 
+                    <DayOffTypeBadge type={item.type} />
+                 </div>
                 </div>
                 <div className="flex items-center shrink-0">
                   {isAdmin && (

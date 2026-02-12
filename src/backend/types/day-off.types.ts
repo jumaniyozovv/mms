@@ -10,6 +10,8 @@ export interface DayOffListItem {
   endDate: Date;
   reason: string | null;
   createdAt: Date;
+  approvedAt: Date | null;
+  approverName: string | null;
 }
 
 export interface CreateDayOffInput {
@@ -35,6 +37,12 @@ export interface DayOffUsage {
   paidUsed: number;
   sickUsed: number;
   personalUsed: number;
+}
+
+export interface DayOffConfigData {
+  paidDaysOff: number;
+  sickDaysOff: number;
+  personalDaysOff: number;
 }
 
 export interface UserDayOffBalance {

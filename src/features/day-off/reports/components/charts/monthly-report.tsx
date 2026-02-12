@@ -53,7 +53,7 @@ export function MonthlyReport() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <h1 className="text-2xl font-bold tracking-tight">Monthly Report</h1>
 
       <Card>

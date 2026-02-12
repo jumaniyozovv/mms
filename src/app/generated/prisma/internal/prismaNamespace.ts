@@ -385,7 +385,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
-  DayOff: 'DayOff'
+  DayOffConfig: 'DayOffConfig',
+  DayOff: 'DayOff',
+  Holiday: 'Holiday'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "dayOff"
+    modelProps: "user" | "dayOffConfig" | "dayOff" | "holiday"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -479,6 +481,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DayOffConfig: {
+      payload: Prisma.$DayOffConfigPayload<ExtArgs>
+      fields: Prisma.DayOffConfigFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DayOffConfigFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DayOffConfigFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>
+        }
+        findFirst: {
+          args: Prisma.DayOffConfigFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DayOffConfigFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>
+        }
+        findMany: {
+          args: Prisma.DayOffConfigFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>[]
+        }
+        create: {
+          args: Prisma.DayOffConfigCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>
+        }
+        createMany: {
+          args: Prisma.DayOffConfigCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DayOffConfigCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>[]
+        }
+        delete: {
+          args: Prisma.DayOffConfigDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>
+        }
+        update: {
+          args: Prisma.DayOffConfigUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>
+        }
+        deleteMany: {
+          args: Prisma.DayOffConfigDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DayOffConfigUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DayOffConfigUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>[]
+        }
+        upsert: {
+          args: Prisma.DayOffConfigUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DayOffConfigPayload>
+        }
+        aggregate: {
+          args: Prisma.DayOffConfigAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDayOffConfig>
+        }
+        groupBy: {
+          args: Prisma.DayOffConfigGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DayOffConfigGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DayOffConfigCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DayOffConfigCountAggregateOutputType> | number
+        }
+      }
+    }
     DayOff: {
       payload: Prisma.$DayOffPayload<ExtArgs>
       fields: Prisma.DayOffFieldRefs
@@ -553,6 +629,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Holiday: {
+      payload: Prisma.$HolidayPayload<ExtArgs>
+      fields: Prisma.HolidayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HolidayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HolidayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        findFirst: {
+          args: Prisma.HolidayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HolidayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        findMany: {
+          args: Prisma.HolidayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>[]
+        }
+        create: {
+          args: Prisma.HolidayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        createMany: {
+          args: Prisma.HolidayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HolidayCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>[]
+        }
+        delete: {
+          args: Prisma.HolidayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        update: {
+          args: Prisma.HolidayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        deleteMany: {
+          args: Prisma.HolidayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HolidayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HolidayUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>[]
+        }
+        upsert: {
+          args: Prisma.HolidayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HolidayPayload>
+        }
+        aggregate: {
+          args: Prisma.HolidayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHoliday>
+        }
+        groupBy: {
+          args: Prisma.HolidayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HolidayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HolidayCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HolidayCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -610,6 +760,16 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const DayOffConfigScalarFieldEnum = {
+  id: 'id',
+  paidDaysOff: 'paidDaysOff',
+  sickDaysOff: 'sickDaysOff',
+  personalDaysOff: 'personalDaysOff'
+} as const
+
+export type DayOffConfigScalarFieldEnum = (typeof DayOffConfigScalarFieldEnum)[keyof typeof DayOffConfigScalarFieldEnum]
+
+
 export const DayOffScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -619,10 +779,22 @@ export const DayOffScalarFieldEnum = {
   endDate: 'endDate',
   reason: 'reason',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  approvedAt: 'approvedAt',
+  approvedById: 'approvedById'
 } as const
 
 export type DayOffScalarFieldEnum = (typeof DayOffScalarFieldEnum)[keyof typeof DayOffScalarFieldEnum]
+
+
+export const HolidayScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  date: 'date',
+  recurring: 'recurring',
+  createdAt: 'createdAt'
+} as const
+
+export type HolidayScalarFieldEnum = (typeof HolidayScalarFieldEnum)[keyof typeof HolidayScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -740,6 +912,13 @@ export type ListEnumDayOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -848,7 +1027,9 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  dayOffConfig?: Prisma.DayOffConfigOmit
   dayOff?: Prisma.DayOffOmit
+  holiday?: Prisma.HolidayOmit
 }
 
 /* Types for Logging */
