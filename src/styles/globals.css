@@ -144,9 +144,21 @@
   border-radius: var(--radius-md) !important;
   font-weight: 500;
   box-shadow: none !important;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
-.day-off-calendar .fc-button-active {
+.day-off-calendar .fc-button:hover {
+  background: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+  border-color: var(--border) !important;
+}
+
+.day-off-calendar .fc-button:focus {
+  box-shadow: 0 0 0 2px var(--ring) !important;
+}
+
+.day-off-calendar .fc-button-active,
+.day-off-calendar .fc-button-active:hover {
   background: var(--primary) !important;
   color: var(--primary-foreground) !important;
   border-color: var(--primary) !important;
@@ -173,6 +185,27 @@
   border-radius: 4px;
   font-size: 0.8rem;
   padding: 1px 4px;
+}
+
+.day-off-calendar .fc-timegrid-slot-label,
+.day-off-calendar .fc-timegrid-axis-cushion {
+  color: var(--muted-foreground);
+}
+
+.day-off-calendar .fc-timegrid-slot {
+  border-color: var(--border);
+}
+
+.day-off-calendar .fc-button-group .fc-button {
+  border-radius: 0 !important;
+}
+
+.day-off-calendar .fc-button-group .fc-button:first-child {
+  border-radius: var(--radius-md) 0 0 var(--radius-md) !important;
+}
+
+.day-off-calendar .fc-button-group .fc-button:last-child {
+  border-radius: 0 var(--radius-md) var(--radius-md) 0 !important;
 }
 
 .fc-event-opacity-60 {

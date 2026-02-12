@@ -12,14 +12,12 @@ import type {
   CreateHolidayInput,
   UpdateHolidayInput,
 } from "@/backend/types/holiday.types";
-import { format } from "date-fns";
 
 function toHolidayItem(holiday: Holiday): HolidayItem {
   return {
     id: holiday.id,
     name: holiday.name,
-    date: format(holiday.date, "yyyy-MM-dd"),
-    recurring: holiday.recurring,
+    date: holiday.date,
     createdAt: holiday.createdAt.toISOString(),
   };
 }
@@ -29,8 +27,7 @@ export async function createNewHoliday(
 ): Promise<HolidayItem> {
   const holiday = await createHoliday({
     name: input.name,
-    date: new Date(input.date),
-    recurring: input.recurring,
+    date: input.date,
   });
   return toHolidayItem(holiday);
 }
@@ -49,8 +46,7 @@ export async function updateHolidayById(
 
   const updated = await updateHoliday(id, {
     name: input.name,
-    date: new Date(input.date),
-    recurring: input.recurring,
+    date: input.date,
   });
   return { data: toHolidayItem(updated) };
 }
@@ -69,9 +65,14 @@ export async function listHolidaysInRange(
   startDate: string,
   endDate: string
 ): Promise<HolidayItem[]> {
-  const holidays = await findHolidaysInRange(
+  const results = await findHolidaysInRange(
     new Date(startDate),
     new Date(endDate)
   );
-  return holidays.map(toHolidayItem);
+  return results.map((r) => ({
+    id: r.id,
+    name: r.name,
+    date: r.date,
+    createdAt: "",
+  }));
 }

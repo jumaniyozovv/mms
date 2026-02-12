@@ -121,7 +121,6 @@ export const HolidayScalarFieldEnum = {
   id: 'id',
   name: 'name',
   date: 'date',
-  recurring: 'recurring',
   createdAt: 'createdAt'
 } as const
 

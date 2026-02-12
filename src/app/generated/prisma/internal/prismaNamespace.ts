@@ -790,7 +790,6 @@ export const HolidayScalarFieldEnum = {
   id: 'id',
   name: 'name',
   date: 'date',
-  recurring: 'recurring',
   createdAt: 'createdAt'
 } as const
 
@@ -908,13 +907,6 @@ export type EnumDayOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'DayOffStatus[]'
  */
 export type ListEnumDayOffStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DayOffStatus[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 

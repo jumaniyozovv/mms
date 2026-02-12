@@ -1,11 +1,9 @@
 import { prisma } from "@/backend/lib/prisma";
 import type { Holiday } from "@/app/generated/prisma/client";
-import { format } from "date-fns";
 
 export async function createHoliday(data: {
   name: string;
-  date: Date;
-  recurring: boolean;
+  date: string;
 }): Promise<Holiday> {
   return prisma.holiday.create({ data });
 }
@@ -20,7 +18,7 @@ export async function findHolidayById(id: string): Promise<Holiday | null> {
 
 export async function updateHoliday(
   id: string,
-  data: { name: string; date: Date; recurring: boolean }
+  data: { name: string; date: string }
 ): Promise<Holiday> {
   return prisma.holiday.update({ where: { id }, data });
 }
@@ -32,39 +30,30 @@ export async function deleteHoliday(id: string): Promise<Holiday> {
 export async function findHolidaysInRange(
   startDate: Date,
   endDate: Date
-): Promise<Holiday[]> {
-  const nonRecurring = await prisma.holiday.findMany({
-    where: {
-      recurring: false,
-      date: { gte: startDate, lte: endDate },
-    },
-  });
-
-  const recurring = await prisma.holiday.findMany({
-    where: { recurring: true },
-  });
+): Promise<{ id: string; name: string; date: string }[]> {
+  const holidays = await prisma.holiday.findMany();
 
   const startYear = startDate.getFullYear();
   const endYear = endDate.getFullYear();
 
-  const materializedRecurring: Holiday[] = [];
-  for (const h of recurring) {
-    const month = h.date.getMonth();
-    const day = h.date.getDate();
+  const results: { id: string; name: string; date: string }[] = [];
+
+  for (const h of holidays) {
+    const [dd, mm] = h.date.split("-").map(Number);
     for (let year = startYear; year <= endYear; year++) {
-      const materialized = new Date(year, month, day);
+      const materialized = new Date(year, mm - 1, dd);
       if (materialized >= startDate && materialized <= endDate) {
-        materializedRecurring.push({
-          ...h,
-          date: materialized,
+        const dateStr = `${year}-${h.date.split("-")[1]}-${h.date.split("-")[0]}`;
+        results.push({
+          id: h.id,
+          name: h.name,
+          date: dateStr,
         });
       }
     }
   }
 
-  return [...nonRecurring, ...materializedRecurring].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
-  );
+  return results.sort((a, b) => a.date.localeCompare(b.date));
 }
 
 export async function getHolidayDatesForYear(year: number): Promise<Set<string>> {
@@ -72,12 +61,9 @@ export async function getHolidayDatesForYear(year: number): Promise<Set<string>>
 
   const dates = new Set<string>();
   for (const h of holidays) {
-    if (h.recurring) {
-      const materialized = new Date(year, h.date.getMonth(), h.date.getDate());
-      dates.add(format(materialized, "yyyy-MM-dd"));
-    } else if (h.date.getFullYear() === year) {
-      dates.add(format(h.date, "yyyy-MM-dd"));
-    }
+    const [dd, mm] = h.date.split("-").map(Number);
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    dates.add(`${year}-${pad(mm)}-${pad(dd)}`);
   }
 
   return dates;

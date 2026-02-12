@@ -27,16 +27,14 @@ export type AggregateHoliday = {
 export type HolidayMinAggregateOutputType = {
   id: string | null
   name: string | null
-  date: Date | null
-  recurring: boolean | null
+  date: string | null
   createdAt: Date | null
 }
 
 export type HolidayMaxAggregateOutputType = {
   id: string | null
   name: string | null
-  date: Date | null
-  recurring: boolean | null
+  date: string | null
   createdAt: Date | null
 }
 
@@ -44,7 +42,6 @@ export type HolidayCountAggregateOutputType = {
   id: number
   name: number
   date: number
-  recurring: number
   createdAt: number
   _all: number
 }
@@ -54,7 +51,6 @@ export type HolidayMinAggregateInputType = {
   id?: true
   name?: true
   date?: true
-  recurring?: true
   createdAt?: true
 }
 
@@ -62,7 +58,6 @@ export type HolidayMaxAggregateInputType = {
   id?: true
   name?: true
   date?: true
-  recurring?: true
   createdAt?: true
 }
 
@@ -70,7 +65,6 @@ export type HolidayCountAggregateInputType = {
   id?: true
   name?: true
   date?: true
-  recurring?: true
   createdAt?: true
   _all?: true
 }
@@ -150,8 +144,7 @@ export type HolidayGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type HolidayGroupByOutputType = {
   id: string
   name: string
-  date: Date
-  recurring: boolean
+  date: string
   createdAt: Date
   _count: HolidayCountAggregateOutputType | null
   _min: HolidayMinAggregateOutputType | null
@@ -179,8 +172,7 @@ export type HolidayWhereInput = {
   NOT?: Prisma.HolidayWhereInput | Prisma.HolidayWhereInput[]
   id?: Prisma.StringFilter<"Holiday"> | string
   name?: Prisma.StringFilter<"Holiday"> | string
-  date?: Prisma.DateTimeFilter<"Holiday"> | Date | string
-  recurring?: Prisma.BoolFilter<"Holiday"> | boolean
+  date?: Prisma.StringFilter<"Holiday"> | string
   createdAt?: Prisma.DateTimeFilter<"Holiday"> | Date | string
 }
 
@@ -188,7 +180,6 @@ export type HolidayOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  recurring?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -198,8 +189,7 @@ export type HolidayWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.HolidayWhereInput[]
   NOT?: Prisma.HolidayWhereInput | Prisma.HolidayWhereInput[]
   name?: Prisma.StringFilter<"Holiday"> | string
-  date?: Prisma.DateTimeFilter<"Holiday"> | Date | string
-  recurring?: Prisma.BoolFilter<"Holiday"> | boolean
+  date?: Prisma.StringFilter<"Holiday"> | string
   createdAt?: Prisma.DateTimeFilter<"Holiday"> | Date | string
 }, "id">
 
@@ -207,7 +197,6 @@ export type HolidayOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  recurring?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.HolidayCountOrderByAggregateInput
   _max?: Prisma.HolidayMaxOrderByAggregateInput
@@ -220,64 +209,56 @@ export type HolidayScalarWhereWithAggregatesInput = {
   NOT?: Prisma.HolidayScalarWhereWithAggregatesInput | Prisma.HolidayScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Holiday"> | string
   name?: Prisma.StringWithAggregatesFilter<"Holiday"> | string
-  date?: Prisma.DateTimeWithAggregatesFilter<"Holiday"> | Date | string
-  recurring?: Prisma.BoolWithAggregatesFilter<"Holiday"> | boolean
+  date?: Prisma.StringWithAggregatesFilter<"Holiday"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Holiday"> | Date | string
 }
 
 export type HolidayCreateInput = {
   id?: string
   name: string
-  date: Date | string
-  recurring?: boolean
+  date: string
   createdAt?: Date | string
 }
 
 export type HolidayUncheckedCreateInput = {
   id?: string
   name: string
-  date: Date | string
-  recurring?: boolean
+  date: string
   createdAt?: Date | string
 }
 
 export type HolidayUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HolidayUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HolidayCreateManyInput = {
   id?: string
   name: string
-  date: Date | string
-  recurring?: boolean
+  date: string
   createdAt?: Date | string
 }
 
 export type HolidayUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type HolidayUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recurring?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  date?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -285,7 +266,6 @@ export type HolidayCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  recurring?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -293,7 +273,6 @@ export type HolidayMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  recurring?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -301,12 +280,7 @@ export type HolidayMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  recurring?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 
@@ -315,7 +289,6 @@ export type HolidaySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   name?: boolean
   date?: boolean
-  recurring?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["holiday"]>
 
@@ -323,7 +296,6 @@ export type HolidaySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   name?: boolean
   date?: boolean
-  recurring?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["holiday"]>
 
@@ -331,7 +303,6 @@ export type HolidaySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   name?: boolean
   date?: boolean
-  recurring?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["holiday"]>
 
@@ -339,11 +310,10 @@ export type HolidaySelectScalar = {
   id?: boolean
   name?: boolean
   date?: boolean
-  recurring?: boolean
   createdAt?: boolean
 }
 
-export type HolidayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "date" | "recurring" | "createdAt", ExtArgs["result"]["holiday"]>
+export type HolidayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "date" | "createdAt", ExtArgs["result"]["holiday"]>
 
 export type $HolidayPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Holiday"
@@ -351,8 +321,7 @@ export type $HolidayPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    date: Date
-    recurring: boolean
+    date: string
     createdAt: Date
   }, ExtArgs["result"]["holiday"]>
   composites: {}
@@ -779,8 +748,7 @@ export interface Prisma__HolidayClient<T, Null = never, ExtArgs extends runtime.
 export interface HolidayFieldRefs {
   readonly id: Prisma.FieldRef<"Holiday", 'String'>
   readonly name: Prisma.FieldRef<"Holiday", 'String'>
-  readonly date: Prisma.FieldRef<"Holiday", 'DateTime'>
-  readonly recurring: Prisma.FieldRef<"Holiday", 'Boolean'>
+  readonly date: Prisma.FieldRef<"Holiday", 'String'>
   readonly createdAt: Prisma.FieldRef<"Holiday", 'DateTime'>
 }
     
