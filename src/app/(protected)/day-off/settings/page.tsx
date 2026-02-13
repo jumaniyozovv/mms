@@ -7,7 +7,7 @@ import { Settings, CalendarDays } from "lucide-react";
 
 export default function DayOffSettingsPage() {
   return (
- <div className="grid grid-cols-3 space-y-6">
+ <div className="grid grid-cols-3 gap-4">
       {/* Clickable Navigation Card */}
       <Link href="/day-off/settings/update-limit">
         <Card className="cursor-pointer transition-all hover:shadow-md hover:border-primary">

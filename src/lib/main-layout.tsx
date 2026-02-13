@@ -15,7 +15,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
                     </div>
                     <ModeToggle />
                 </header>
-                <main className="w-full h-[calc(100vh-84px)] mt-2 rounded-lg border bg-card overflow-y-auto p-4">
+                <main className="w-full h-[calc(100vh-84px)] mt-2 rounded-lg border bg-card overflow-y-auto overflow-x-hidden p-4">
                     {children}
                 </main>
             </SidebarInset>

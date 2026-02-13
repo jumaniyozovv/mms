@@ -37,7 +37,7 @@ export function PendingDayOffList() {
   const isBusy = deleteMutation.isPending || statusMutation.isPending
 
   return (
-    <Card>
+    <Card className="h-full w-full overflow-y-auto">
       <CardHeader>
         <CardTitle className="text-sm font-medium">Pending Requests ({pending?.length})</CardTitle>
       </CardHeader>

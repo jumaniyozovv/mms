@@ -53,7 +53,7 @@
 
     // Valid session + auth page → redirect to home
     if (isAuthPath && isAccessTokenValid) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     return NextResponse.next();
