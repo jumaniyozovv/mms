@@ -51,7 +51,7 @@ export function RegisterForm() {
   };
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-xl">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">
           Create Account
@@ -169,7 +169,7 @@ export function RegisterForm() {
             />
           </CardContent>
 
-          <CardFooter className="flex flex-col space-y-4">
+          <CardFooter className="flex flex-col mt-2 space-y-4">
             <Button
               type="submit"
               className="w-full"
