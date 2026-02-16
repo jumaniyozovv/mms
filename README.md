@@ -1,36 +1,178 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MMS - Management System
+
+A full-stack employee management system built with Next.js, featuring day-off tracking, user management, and role-based access control.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router, Turbopack, standalone output)
+- **Language:** TypeScript 5, React 19
+- **Styling:** Tailwind CSS v4, shadcn/ui (radix-ui), lucide-react
+- **State & Data:** TanStack Query v5, TanStack Table v8
+- **Forms:** React Hook Form + Zod validation
+- **Charts:** Recharts, FullCalendar
+- **Database:** PostgreSQL via Prisma 7 (PrismaPg adapter)
+- **Cache:** Redis (ioredis) for refresh token storage
+- **Auth:** JWT + bcrypt, httpOnly cookies, auto-refresh via axios interceptor
+- **Export:** XLSX/CSV via xlsx
+- **Containerization:** Docker + Docker Compose
+
+## Features
+
+### Authentication & Authorization
+- JWT-based auth with access token (3 min) and refresh token (7 days)
+- Auto token refresh via axios interceptor on 401
+- Role-based access: **ADMIN** > **MANAGER** > **USER**
+- First registered user becomes ADMIN; subsequent registration is blocked
+
+### User Management
+- CRUD operations for users (admin only)
+- Per-user day-off limits (paid, sick, personal)
+- User listing with search, pagination, and XLSX/CSV export
+
+### Day-Off Management
+- Request day-offs with type selection (paid, sick, personal)
+- Calendar view with FullCalendar integration
+- Approval workflow (pending / approved / rejected)
+- Holiday-aware day counting (holidays excluded from limits)
+- My Requests page for tracking personal submissions
+
+### Day-Off Reports
+- **Balance Report** — radial charts + table showing used vs. total days per type
+- **Detailed Report** — full day-off history with usage chart
+- **Monthly Report** — calendar-based monthly view
+- **Total Report** — aggregated statistics
+- Role-based filtering: admins see all users, regular users see only their own data
+
+### Day-Off Settings (Admin)
+- Configure default day-off limits (paid, sick, personal)
+- Update individual user limits
+- Holiday management (CRUD)
+
+### Dashboard
+- Overview statistics (users, day-offs, pending requests)
+- Pending day-off list with approve/reject actions (admin)
+
+### Settings
+- Change password
+- Theme toggle (light/dark mode)
+
+## Project Structure
+
+```
+src/
+├── app/                        # Next.js App Router
+│   ├── (auth)/                 # Public pages (login, register)
+│   ├── (protected)/            # Auth-required pages
+│   │   ├── dashboard/          # Overview & stats
+│   │   ├── users/              # User management
+│   │   ├── settings/           # User settings
+│   │   └── day-off/            # Day-off module
+│   │       ├── dashboard/      # Day-off calendar & pending list
+│   │       ├── my-requests/    # Personal day-off requests
+│   │       ├── reports/        # Balance, detailed, monthly, total
+│   │       └── settings/       # Limits config & holidays
+│   └── api/                    # API routes
+│       ├── auth/               # login, register, logout, refresh, me, change-password
+│       ├── dashboard/          # stats
+│       ├── day-off/            # CRUD, list, usage, balance, reports
+│       ├── holidays/           # CRUD, in-range
+│       └── users/              # CRUD, list
+├── backend/                    # Server-side logic
+│   ├── config/                 # Constants (token expiry, bcrypt rounds)
+│   ├── lib/                    # Prisma, Redis, JWT, password utils
+│   ├── middleware/             # Auth (withAuth), role checks
+│   ├── repositories/           # Data access layer
+│   ├── services/               # Business logic
+│   ├── types/                  # TypeScript interfaces
+│   ├── utils/                  # API response helpers
+│   └── validators/             # Zod schemas
+├── components/
+│   ├── ui/                     # shadcn/ui primitives
+│   └── common/                 # App-level shared components (sidebar, data-table)
+├── features/                   # Feature modules
+│   ├── auth/                   # Login & register
+│   ├── users/                  # User management
+│   └── day-off/                # Day-off (dashboard, reports, settings, my-requests)
+├── shared/
+│   ├── lib/                    # Axios instance, cookie helpers
+│   └── providers/              # AuthProvider, QueryProvider, ThemeProvider
+├── hooks/                      # Global hooks
+├── lib/                        # Utils (cn), layout, menu config
+└── prisma/schema.prisma        # Database schema
+```
+
+## Prerequisites
+
+- Node.js 20+
+- pnpm
+- PostgreSQL 16+
+- Redis 7+
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone and install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd mms
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Configure environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env` file in the project root:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/mms"
+REDIS_URL="redis://localhost:6379"
+JWT_ACCESS_SECRET="your-access-secret"
+JWT_REFRESH_SECRET="your-refresh-secret"
+```
 
-## Learn More
+### 3. Set up the database
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm db:generate    # Generate Prisma client
+pnpm db:push        # Push schema to database
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Run the dev server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) in your browser. Register the first user to become ADMIN.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Docker
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Run the entire stack with Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+This starts:
+- **app** — Next.js on port 3000
+- **db** — PostgreSQL 16 on port 5432
+- **redis** — Redis 7 on port 6379
+
+## Database Commands
+
+```bash
+pnpm db:generate    # Generate Prisma client
+pnpm db:push        # Push schema changes to database
+pnpm db:studio      # Open Prisma Studio GUI
+```
+
+## API Response Format
+
+All API routes return consistent responses:
+
+```json
+// Success
+{ "success": true, "data": { ... } }
+
+// Error
+{ "success": false, "message": "Error description" }
+```
