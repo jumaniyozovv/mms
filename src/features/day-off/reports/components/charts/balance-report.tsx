@@ -6,6 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
 import { useDayOffUsage } from "@/features/day-off/dashboard/hooks"
 import { BalanceReportTable } from "../tables"
+import { ArrowLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 const types = [
   { key: "paid", label: "Paid", color: "hsl(142, 71%, 45%)" },
@@ -28,10 +31,13 @@ function getUsage(
 export function BalanceReport() {
   const year = new Date().getFullYear()
   const { data: usage } = useDayOffUsage()
-
+  const router = useRouter()
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold tracking-tight">Balance Report</h1>
+      <div className="flex gap-2 items-center">
+        <Button variant="secondary" className="hover:cursor-pointer" onClick={router.back}><ArrowLeft className="w-6" /></Button>
+        <h1 className="text-2xl font-bold tracking-tight">Balance Report</h1>
+      </div>
 
       {usage && (
         <Card>
@@ -76,7 +82,7 @@ export function BalanceReport() {
                       </ChartContainer>
                       <div className="absolute inset-0 flex items-center justify-center">
                         <p className="text-lg font-bold tabular-nums text-muted-foreground">
-                          {used}/{total}
+                          {Math.round(pct)}%
                         </p>
                       </div>
                     </div>

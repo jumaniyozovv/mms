@@ -1,4 +1,4 @@
-import { getUserDayOffReport } from "@/backend/services/day-off.service";
+import { getDayOffReportByRole } from "@/backend/services/day-off.service";
 import { withAuth } from "@/backend/middleware/auth";
 import { successResponse, errorResponse } from "@/backend/utils/api-response";
 
@@ -7,7 +7,7 @@ export const GET = withAuth(async (request, { user }) => {
     const { searchParams } = new URL(request.url);
     const year = Number(searchParams.get("year")) || new Date().getFullYear();
 
-    const data = await getUserDayOffReport(user.userId, year);
+    const data = await getDayOffReportByRole(user.userId, user.role, year);
     return successResponse(data);
   } catch (error) {
     console.error("Get day off report error:", error);

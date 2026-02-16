@@ -38,11 +38,13 @@ const types = [
 
 export function DayOffUsageChart() {
   const { data: usage } = useDayOffUsage()
+  // const pct = total > 0 ? (used / total) * 100 : 0
+
 
   if (!usage) return null
 
   return (
-    <Carousel opts={{ loop:true, align:'center',watchFocus:true}} className="w-68">
+    <Carousel opts={{ loop: true, align: 'center', watchFocus: true }} className="w-68">
       <CarouselContent>
         {types.map((type) => {
           const used = usage[type.usedKey]
@@ -60,45 +62,45 @@ export function DayOffUsageChart() {
           return (
             <CarouselItem key={type.key} className="basis-1/2">
               <Card className="w-34 h-38 flex flex-col items-center  justify-center p-2">
-                  <div className="relative">
-                    <ChartContainer
-                      config={chartConfig}
-                      className="size-24  aspect-square"
-                    >
-                      <RadialBarChart
-                        innerRadius="73%"
-                        outerRadius="100%"
-                        data={data}
-                        startAngle={90}
-                        endAngle={-270}
-                      >
-                        <PolarAngleAxis
-                          type="number"
-                          domain={[0, 100]}
-                          angleAxisId={0}
-                          tick={false}
-                        />
-                        <RadialBar
-                          dataKey="value"
-                          cornerRadius={8}
-                          background={{ fill: "hsl(var(--muted))" }}
-                        />
-                      </RadialBarChart>
-                    </ChartContainer>
-                    <div className="absolute inset-0 flex items-center justify-center ">
-                      <span
-                        className="text-sm font-bold text-muted-foreground tabular-nums"
-                      >
-                        {used}/{total}
-                      </span>
-                    </div>
-                  </div>
-                  <p
-                    className="text-xs font-semibold leading-0"
-                    style={{ color: type.color }}
+                <div className="relative">
+                  <ChartContainer
+                    config={chartConfig}
+                    className="size-24  aspect-square"
                   >
-                    {type.label}
-                  </p>
+                    <RadialBarChart
+                      innerRadius="73%"
+                      outerRadius="100%"
+                      data={data}
+                      startAngle={90}
+                      endAngle={-270}
+                    >
+                      <PolarAngleAxis
+                        type="number"
+                        domain={[0, 100]}
+                        angleAxisId={0}
+                        tick={false}
+                      />
+                      <RadialBar
+                        dataKey="value"
+                        cornerRadius={8}
+                        background={{ fill: "hsl(var(--muted))" }}
+                      />
+                    </RadialBarChart>
+                  </ChartContainer>
+                  <div className="absolute inset-0 flex items-center justify-center ">
+                    <span
+                      className="text-sm font-bold text-muted-foreground tabular-nums"
+                    >
+                      {Math.round(percentage)}%
+                    </span>
+                  </div>
+                </div>
+                <p
+                  className="text-xs font-semibold leading-0"
+                  style={{ color: type.color }}
+                >
+                  {type.label}
+                </p>
               </Card>
             </CarouselItem>
           )

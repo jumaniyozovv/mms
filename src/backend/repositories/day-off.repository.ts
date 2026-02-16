@@ -125,6 +125,25 @@ export async function findByUserId(
   });
 }
 
+export async function findAllByYear(
+  year: number
+): Promise<DayOffWithUser[]> {
+  const startOfYear = new Date(year, 0, 1);
+  const endOfYear = new Date(year, 11, 31);
+
+  return prisma.dayOff.findMany({
+    where: {
+      startDate: { lte: endOfYear },
+      endDate: { gte: startOfYear },
+    },
+    include: {
+      user: { select: { firstName: true, lastName: true } },
+      approvedBy: { select: { firstName: true, lastName: true } },
+    },
+    orderBy: { startDate: "desc" },
+  });
+}
+
 export async function countDayOffsInMonth(
   year: number,
   month: number

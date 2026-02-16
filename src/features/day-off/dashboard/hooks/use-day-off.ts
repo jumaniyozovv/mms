@@ -79,7 +79,6 @@ export function useMyPendingDayOffs() {
   return useQuery({
     queryKey: dayOffKeys.myPending(),
     queryFn: getMyPendingDayOffs,
-    refetchInterval: 30_000,
   });
 }
 

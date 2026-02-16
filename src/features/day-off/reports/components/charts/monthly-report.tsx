@@ -10,7 +10,7 @@ import {
   subMonths,
   isWithinInterval,
 } from "date-fns"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,6 +22,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 import { useMyReport } from "../../hooks"
+import { useRouter } from "next/navigation"
 
 const chartConfig = {
   dayOff: { label: "Day Off", color: "hsl(217, 91%, 60%)" },
@@ -31,6 +32,7 @@ export function MonthlyReport() {
   const [month, setMonth] = React.useState(() => startOfMonth(new Date()))
   const year = month.getFullYear()
   const { data: records } = useMyReport(year)
+  const router = useRouter()
 
   const days = eachDayOfInterval({
     start: startOfMonth(month),
@@ -54,8 +56,10 @@ export function MonthlyReport() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold tracking-tight">Monthly Report</h1>
-
+      <div className="flex gap-2 items-center">
+        <Button variant="secondary" className="hover:cursor-pointer" onClick={router.back}><ArrowLeft className="w-6" /></Button>
+        <h1 className="text-2xl font-bold tracking-tight">Monthly Report</h1>
+      </div>
       <Card>
         <CardHeader className="flex-row items-center justify-between space-y-0">
           <CardTitle className="text-sm font-medium">

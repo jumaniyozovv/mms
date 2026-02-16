@@ -8,6 +8,7 @@ import {
   deleteDayOff,
   countUsedDaysByType,
   findByUserId,
+  findAllByYear,
   type DayOffWithUser,
 } from "@/backend/repositories/day-off.repository";
 import {
@@ -158,6 +159,65 @@ export async function getUserDayOffReport(
 ): Promise<DayOffListItem[]> {
   const dayOffs = await findByUserId(userId, year);
   return dayOffs.map(toDayOffListItem);
+}
+
+export async function getAllDayOffReport(
+  year: number
+): Promise<DayOffListItem[]> {
+  const dayOffs = await findAllByYear(year);
+  return dayOffs.map(toDayOffListItem);
+}
+
+export async function getDayOffReportByRole(
+  userId: string,
+  role: string,
+  year: number
+): Promise<DayOffListItem[]> {
+  if (role === "ADMIN") {
+    return getAllDayOffReport(year);
+  }
+  return getUserDayOffReport(userId, year);
+}
+
+export async function getUserBalance(
+  userId: string,
+  year: number
+): Promise<UserDayOffBalance[]> {
+  const user = await findUserById(userId);
+  if (!user) return [];
+
+  const holidayDates = await getHolidayDatesForYear(year);
+  const [paidUsed, sickUsed, personalUsed] = await Promise.all([
+    countUsedDaysByType(userId, "PAID", year, holidayDates),
+    countUsedDaysByType(userId, "SICK", year, holidayDates),
+    countUsedDaysByType(userId, "PERSONAL", year, holidayDates),
+  ]);
+
+  return [
+    {
+      userId: user.id,
+      userName: `${user.firstName} ${user.lastName}`,
+      paidUsed,
+      paidTotal: user.paidDaysOff,
+      sickUsed,
+      sickTotal: user.sickDaysOff,
+      personalUsed,
+      personalTotal: user.personalDaysOff,
+      totalUsed: paidUsed + sickUsed + personalUsed,
+      totalLimit: user.paidDaysOff + user.sickDaysOff + user.personalDaysOff,
+    },
+  ];
+}
+
+export async function getBalanceByRole(
+  userId: string,
+  role: string,
+  year: number
+): Promise<UserDayOffBalance[]> {
+  if (role === "ADMIN") {
+    return getAllUsersBalance(year);
+  }
+  return getUserBalance(userId, year);
 }
 
 export async function getAllUsersBalance(year: number): Promise<UserDayOffBalance[]> {

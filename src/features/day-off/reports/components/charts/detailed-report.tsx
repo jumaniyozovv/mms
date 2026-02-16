@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/chart"
 import { useDayOffUsage } from "@/features/day-off/dashboard/hooks"
 import { DetailedReportTable } from "../tables"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const TYPE_COLORS = {
   Paid: "hsl(142, 71%, 45%)",
@@ -25,19 +28,22 @@ const chartConfig = {
 export function DetailedReport() {
   const year = new Date().getFullYear()
   const { data: usage } = useDayOffUsage()
+  const router = useRouter()
 
   const chartData = usage
     ? [
-        { type: "Paid", used: usage.paidUsed },
-        { type: "Sick", used: usage.sickUsed },
-        { type: "Personal", used: usage.personalUsed },
-      ]
+      { type: "Paid", used: usage.paidUsed },
+      { type: "Sick", used: usage.sickUsed },
+      { type: "Personal", used: usage.personalUsed },
+    ]
     : []
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold tracking-tight">Detailed Report</h1>
-
+      <div className="flex gap-2 items-center">
+        <Button variant="secondary" className="hover:cursor-pointer" onClick={router.back}><ArrowLeft className="w-6" /></Button>
+        <h1 className="text-2xl font-bold tracking-tight">Detailed Report</h1>
+      </div>
       {usage && (
         <Card>
           <CardHeader>

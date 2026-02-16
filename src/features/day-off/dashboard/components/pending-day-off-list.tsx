@@ -1,19 +1,21 @@
 "use client"
 
 import { format } from "date-fns"
-import { Check, X, Trash2 } from "lucide-react"
+import { Check, X, Trash2, RotateCw } from "lucide-react"
 import { toast } from "sonner"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { DayOffTypeBadge } from "./badge"
 import { useAuth } from "@/shared/providers/AuthProvider"
-import { useMyPendingDayOffs, useDeleteDayOff, useUpdateDayOffStatus } from "../hooks"
+import { useMyPendingDayOffs, useDeleteDayOff, useUpdateDayOffStatus, dayOffKeys } from "../hooks"
+import { useQueryClient } from "@tanstack/react-query"
+import { cn } from "@/lib/utils"
 
 export function PendingDayOffList() {
   const { user } = useAuth()
   const isAdmin = user?.role === "ADMIN"
-  const { data: pending } = useMyPendingDayOffs()
+  const { data: pending,isLoading, isFetching } = useMyPendingDayOffs()
   const deleteMutation = useDeleteDayOff()
   const statusMutation = useUpdateDayOffStatus()
 
@@ -35,11 +37,13 @@ export function PendingDayOffList() {
   }
 
   const isBusy = deleteMutation.isPending || statusMutation.isPending
+  const queryClient = useQueryClient()
 
   return (
     <Card className="h-full w-full overflow-y-auto">
-      <CardHeader>
-        <CardTitle className="text-sm font-medium">Pending Requests ({pending?.length})</CardTitle>
+      <CardHeader className="w-full flex items-center justify-between">
+        <p className="text-sm font-medium">Pending Requests ({pending?.length})</p>
+        <Button variant="secondary" className="border-none w-fit" onClick={()=>queryClient.invalidateQueries({queryKey:dayOffKeys.all})}><RotateCw className={cn(isFetching?"animate-spin":"","size-5")}/></Button>
       </CardHeader>
       <CardContent>
         {!pending?.length ? (
