@@ -13,7 +13,7 @@ import {
   validationErrorResponse,
 } from "@/backend/utils/api-response";
 
-export const PUT = withRole("ADMIN", async (request: NextRequest, { user }) => {
+export const PUT = withRole("MANAGER", async (request: NextRequest) => {
   try {
     const id = request.nextUrl.pathname.split("/").pop()!;
     const body = await request.json();
@@ -38,7 +38,6 @@ export const PUT = withRole("ADMIN", async (request: NextRequest, { user }) => {
 export const DELETE = withRole("ADMIN", async (request: NextRequest, { user }) => {
   try {
     const id = request.nextUrl.pathname.split("/").pop()!;
-
     const result = await deleteExistingUser(id, user.userId);
     if (!result.success) {
       const status = result.error === "User not found" ? 404 : 400;

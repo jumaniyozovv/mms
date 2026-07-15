@@ -1,3 +1,5 @@
+import { DayOffStatus, DayOffType } from "@/app/generated/prisma/enums";
+
 export interface DashboardStats {
   totalUsers: number;
   monthlyRequests: number;
@@ -8,8 +10,8 @@ export interface DayOffListItem {
   id: string;
   userId: string;
   userName: string;
-  type: "PAID" | "SICK" | "PERSONAL";
-  status: "PENDING" | "APPROVED" | "REJECTED";
+  type: DayOffType;
+  status: DayOffStatus;
   startDate: string;
   endDate: string;
   reason: string | null;
@@ -19,7 +21,7 @@ export interface DayOffListItem {
 }
 
 export interface CreateDayOffInput {
-  type: "PAID" | "SICK" | "PERSONAL";
+  type: DayOffType;
   startDate: string;
   endDate: string;
   reason?: string;
@@ -31,7 +33,7 @@ export interface DayOffCalendarFilters {
 }
 
 export interface UpdateDayOffStatusInput {
-  status: "APPROVED" | "REJECTED";
+  status: DayOffStatus;
 }
 
 export interface DayOffUsage {

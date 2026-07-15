@@ -1,15 +1,18 @@
-import { LayoutDashboardIcon, UserIcon, SettingsIcon, CalendarDays, LucideIcon, Users, FileBarChart } from "lucide-react";
+import { UserRole } from "@/app/generated/prisma/enums";
+import { LayoutDashboardIcon,  SettingsIcon, CalendarDays, LucideIcon, Users, FileBarChart, ListCheckIcon,FolderGit2 } from "lucide-react";
+
+
 
 export interface SubMenuItem{
-    title: string;
+  title: string;
   icon: LucideIcon;
-  roles: ("admin" | "manager" | "user")[];
+  roles: UserRole[];
   path: string; 
 }
 export interface MenuItem {
   title: string;
   icon: LucideIcon;
-  roles: ("admin" | "manager" | "user")[]; // allowed roles
+  roles: UserRole[]; // allowed roles
   path: string; // URL path
   subitems?:SubMenuItem[]
 };
@@ -18,37 +21,63 @@ export const menuItems: MenuItem[] = [
   {
     title: "Dashboard",
     icon: LayoutDashboardIcon,
-    roles: ["admin", "manager"],
+    roles: [],
     path: "/dashboard",
   },
   {
     title: "Users",
-    icon: UserIcon,
-    roles: ["admin"],
+    icon: Users,
+    roles: [],
     path: "/users",
+  },
+  {
+  title: "Tasks",
+  icon: ListCheckIcon,
+  roles: [],
+  path: "/tasks",
+  subitems: [
+    {
+      title: "Table",
+      icon: ListCheckIcon,
+      roles: [],
+      path: "/tasks",
+    },
+    {
+      title: "Board",
+      icon: LayoutDashboardIcon, // or Kanban/Columns icon if lucide has one
+      roles: [],
+      path: "/tasks/board",
+    },
+  ],
+},
+    {
+    title: "Projects",
+    icon: FolderGit2,
+    roles: [],
+    path: "/projects",
   },
   {
     title: "Day Off",
     icon: CalendarDays,
-    roles: ["admin", "manager", "user"],
+    roles: [],
     path: "/day-off",
     subitems: [
       {
         title: "Dashboard",
         icon: LayoutDashboardIcon,
-        roles: ["admin", "manager", "user"],
+        roles: [],
         path: "/day-off/dashboard",
       },
       {
         title: "Reports",
         icon: FileBarChart,
-        roles: ["admin", "manager", "user"],
+        roles: [],
         path: "/day-off/reports",
       },
       {
         title: "Settings",
         icon: SettingsIcon,
-        roles: ["admin", "manager"],
+        roles: ["ADMIN", "MANAGER"],
         path: "/day-off/settings",
       },
     ],
@@ -56,7 +85,7 @@ export const menuItems: MenuItem[] = [
   {
     title: "Settings",
     icon: SettingsIcon,
-    roles: ["admin", "manager"],
+    roles: [],
     path: "/settings",
   },
 ];

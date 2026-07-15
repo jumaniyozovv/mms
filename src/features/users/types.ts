@@ -1,10 +1,12 @@
+import { UserRole } from "@/app/generated/prisma/enums";
+
 export interface UserListItem {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   phone: string | null;
-  role: "ADMIN" | "MANAGER" | "USER";
+  role: UserRole;
   createdAt: string;
   updatedAt: string;
 }
@@ -26,12 +28,12 @@ export interface CreateUserInput {
   firstName: string;
   lastName: string;
   phone?: string;
-  role?: "ADMIN" | "MANAGER" | "USER";
+  role?: UserRole;
 }
 
 export interface UpdateUserInput {
   firstName: string;
   lastName: string;
   phone?: string;
-  role: "ADMIN" | "MANAGER" | "USER";
+  role: UserRole;
 }

@@ -1,4 +1,3 @@
-2
 import { NextRequest } from "next/server";
 import { createNewUser } from "@/backend/services/user.service";
 import {

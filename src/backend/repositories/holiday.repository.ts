@@ -1,10 +1,8 @@
 import { prisma } from "@/backend/lib/prisma";
 import type { Holiday } from "@/app/generated/prisma/client";
+import { HolidayCreateInput, HolidayUpdateInput } from "@/app/generated/prisma/models";
 
-export async function createHoliday(data: {
-  name: string;
-  date: string;
-}): Promise<Holiday> {
+export async function createHoliday(data: HolidayCreateInput): Promise<Holiday> {
   return prisma.holiday.create({ data });
 }
 
@@ -18,7 +16,7 @@ export async function findHolidayById(id: string): Promise<Holiday | null> {
 
 export async function updateHoliday(
   id: string,
-  data: { name: string; date: string }
+  data: HolidayUpdateInput
 ): Promise<Holiday> {
   return prisma.holiday.update({ where: { id }, data });
 }

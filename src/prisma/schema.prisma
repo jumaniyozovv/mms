@@ -42,6 +42,9 @@ model User {
   dayOffs         DayOff[] @relation("UserDayOffs")
   approvedDayOffs DayOff[] @relation("ApprovedDayOffs")
 
+
+  assignedTasks Task[] @relation("AssignedTasks")
+
   @@map("users")
 }
 
@@ -79,4 +82,75 @@ model Holiday {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("holidays")
+}
+
+/*  TASKS ENUM  */
+
+enum TaskType {
+  TASK
+  BUG
+  FEATURE
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  PAUSED
+  IN_REVIEW
+  DONE
+  BLOCKED
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+model Task {
+  id          String      @id @default(uuid())
+  key         String       @unique   // e.g. "MMS-14" — stored, never recomputed
+  title       String
+  description String?
+  type        TaskType
+  status      TaskStatus  @default(TODO)
+  priority    TaskPriority @default(MEDIUM)
+
+  assigneeId  String?
+  assignee    User? @relation("AssignedTasks", fields: [assigneeId], references: [id])
+
+  projectId   String      @map("project_id")
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  githubUrl   String?       @map("github_url")
+  status      ProjectStatus @default(ACTIVE)
+
+  prefix      String        @unique   // e.g. "MMS" — short, uppercase, used in task keys
+  taskCounter Int           @default(0) @map("task_counter") // last number issued, increments only
+
+
+  tasks       Task[]
+
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  @@map("projects")
 }

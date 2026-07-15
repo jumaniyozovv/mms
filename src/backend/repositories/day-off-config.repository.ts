@@ -1,5 +1,6 @@
 import { prisma } from "@/backend/lib/prisma";
 import type { DayOffConfig } from "@/app/generated/prisma/client";
+import { DayOffConfigData } from "../types/day-off.types";
 
 const SINGLETON_ID = "default";
 
@@ -16,11 +17,7 @@ export async function getConfig(): Promise<DayOffConfig> {
   });
 }
 
-export async function updateConfig(data: {
-  paidDaysOff: number;
-  sickDaysOff: number;
-  personalDaysOff: number;
-}): Promise<DayOffConfig> {
+export async function updateConfig(data: DayOffConfigData): Promise<DayOffConfig> {
   return prisma.dayOffConfig.upsert({
     where: { id: SINGLETON_ID },
     update: data,

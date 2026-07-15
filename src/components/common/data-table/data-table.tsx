@@ -98,9 +98,9 @@ export function DataTable<TData>({
               )) :
               table.getRowModel().rows.length ? (
                 table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} className="h-8!">
+                  <TableRow key={row.id}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} className="h-5! py-0!">
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()

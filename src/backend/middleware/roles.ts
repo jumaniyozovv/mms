@@ -32,3 +32,38 @@ export function withRole(
     return handler(request, { user });
   };
 }
+
+
+// backend/middleware/roles.ts
+
+/**
+ * Can this user modify (update) this task?
+ * - ADMIN/MANAGER: yes, any task.
+ * - USER: only if they're the assignee.
+ */
+export function canModifyTask(
+  role: UserRole,
+  userId: string,
+  task: { assigneeId: string | null }
+): boolean {
+  if (role === "ADMIN" || role === "MANAGER") return true;
+  return task.assigneeId === userId;
+}
+
+/**
+ * Can this user delete this task?
+ * - ADMIN/MANAGER: yes, any task.
+ * - USER:yes their own
+ */
+export function canDeleteTask(
+  role: UserRole,
+  userId: string,
+  task: { assigneeId: string | null }
+): boolean {
+  if (role === "ADMIN" || role === "MANAGER") return true;
+  return task.assigneeId === userId; // assignee can delete their own
+}
+
+export function canManageProjects(role: UserRole): boolean {
+  return role === "ADMIN" || role === "MANAGER";
+}

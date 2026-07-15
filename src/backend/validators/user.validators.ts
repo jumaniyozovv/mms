@@ -17,7 +17,7 @@ export const createUserSchema = z.object({
 
 export const userListSchema = z.object({
   page: z.number().int().min(1, "Page must be at least 1"),
-  limit: z.number().int().min(1).max(100, "Limit must be between 1 and 100"),
+  limit: z.number().int().min(1).max(500, "Limit must be between 1 and 500"),
   search: z.string().optional(),
 });
 

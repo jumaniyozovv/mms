@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { toast } from "sonner"
+import * as React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import {
   DialogTitle,
   DialogFooter,
   DialogDescription,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -22,26 +22,30 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useUpdateUser } from "../hooks"
-import { updateUserSchema, type UpdateUserFormData } from "../schema"
-import type { UserListItem } from "../types"
+} from "@/components/ui/select";
+import { useUpdateUser } from "../hooks";
+import { updateUserSchema, type UpdateUserFormData } from "../schema";
+import type { UserListItem } from "../types";
 
 interface EditUserDialogProps {
-  user: UserListItem
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  user: UserListItem;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps) {
-  const updateUserMutation = useUpdateUser()
+export function EditUserDialog({
+  user,
+  open,
+  onOpenChange,
+}: EditUserDialogProps) {
+  const updateUserMutation = useUpdateUser();
 
   const form = useForm<UpdateUserFormData>({
     resolver: zodResolver(updateUserSchema),
@@ -51,7 +55,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
       phone: user.phone ?? "",
       role: user.role,
     },
-  })
+  });
 
   React.useEffect(() => {
     if (open) {
@@ -60,23 +64,23 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
         lastName: user.lastName,
         phone: user.phone ?? "",
         role: user.role,
-      })
+      });
     }
-  }, [open, user, form])
+  }, [open, user, form]);
 
   function onSubmit(data: UpdateUserFormData) {
     updateUserMutation.mutate(
       { id: user.id, input: data },
       {
         onSuccess: () => {
-          toast.success("User updated successfully")
-          onOpenChange(false)
+          toast.success("User updated successfully");
+          onOpenChange(false);
         },
         onError: (error) => {
-          toast.error(error.message || "Failed to update user")
+          toast.error(error.message || "Failed to update user");
         },
-      }
-    )
+      },
+    );
   }
 
   return (
@@ -84,9 +88,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit User</DialogTitle>
-          <DialogDescription>
-            Update the user details below.
-          </DialogDescription>
+          <DialogDescription>Update the user details below.</DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -137,7 +139,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
                   <FormLabel>Phone</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Phone number"
+                      placeholder="90 123 45 67"
                       disabled={updateUserMutation.isPending}
                       {...field}
                     />
@@ -175,10 +177,7 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
             />
 
             <DialogFooter>
-              <Button
-                type="submit"
-                disabled={updateUserMutation.isPending}
-              >
+              <Button type="submit" disabled={updateUserMutation.isPending}>
                 {updateUserMutation.isPending ? "Saving..." : "Save Changes"}
               </Button>
             </DialogFooter>
@@ -186,5 +185,5 @@ export function EditUserDialog({ user, open, onOpenChange }: EditUserDialogProps
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Users, CalendarDays, CalendarCheck, ArrowRight } from "lucide-react"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { useAuth } from "@/shared/providers/AuthProvider"

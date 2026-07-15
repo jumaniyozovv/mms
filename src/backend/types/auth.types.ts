@@ -25,6 +25,14 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterInput {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone:string;
+}
+
 export interface ChangePasswordInput {
   currentPassword: string;
   newPassword: string;

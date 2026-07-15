@@ -59,3 +59,13 @@ export type DayOff = Prisma.DayOffModel
  * 
  */
 export type Holiday = Prisma.HolidayModel
+/**
+ * Model Task
+ * 
+ */
+export type Task = Prisma.TaskModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel

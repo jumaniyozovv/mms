@@ -282,6 +282,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   dayOffs?: Prisma.DayOffListRelationFilter
   approvedDayOffs?: Prisma.DayOffListRelationFilter
+  assignedTasks?: Prisma.TaskListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -299,6 +300,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   dayOffs?: Prisma.DayOffOrderByRelationAggregateInput
   approvedDayOffs?: Prisma.DayOffOrderByRelationAggregateInput
+  assignedTasks?: Prisma.TaskOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -319,6 +321,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   dayOffs?: Prisma.DayOffListRelationFilter
   approvedDayOffs?: Prisma.DayOffListRelationFilter
+  assignedTasks?: Prisma.TaskListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -374,6 +377,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   dayOffs?: Prisma.DayOffCreateNestedManyWithoutUserInput
   approvedDayOffs?: Prisma.DayOffCreateNestedManyWithoutApprovedByInput
+  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -391,6 +395,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   dayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutUserInput
   approvedDayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutApprovedByInput
+  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput
 }
 
 export type UserUpdateInput = {
@@ -408,6 +413,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOffs?: Prisma.DayOffUpdateManyWithoutUserNestedInput
   approvedDayOffs?: Prisma.DayOffUpdateManyWithoutApprovedByNestedInput
+  assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -425,6 +431,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutUserNestedInput
   approvedDayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutApprovedByNestedInput
+  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -589,6 +596,22 @@ export type UserUpdateOneWithoutApprovedDayOffsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprovedDayOffsInput, Prisma.UserUpdateWithoutApprovedDayOffsInput>, Prisma.UserUncheckedUpdateWithoutApprovedDayOffsInput>
 }
 
+export type UserCreateNestedOneWithoutAssignedTasksInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTasksInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutAssignedTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTasksInput
+  upsert?: Prisma.UserUpsertWithoutAssignedTasksInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedTasksInput, Prisma.UserUpdateWithoutAssignedTasksInput>, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>
+}
+
 export type UserCreateWithoutDayOffsInput = {
   id?: string
   email: string
@@ -603,6 +626,7 @@ export type UserCreateWithoutDayOffsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   approvedDayOffs?: Prisma.DayOffCreateNestedManyWithoutApprovedByInput
+  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput
 }
 
 export type UserUncheckedCreateWithoutDayOffsInput = {
@@ -619,6 +643,7 @@ export type UserUncheckedCreateWithoutDayOffsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   approvedDayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutApprovedByInput
+  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput
 }
 
 export type UserCreateOrConnectWithoutDayOffsInput = {
@@ -640,6 +665,7 @@ export type UserCreateWithoutApprovedDayOffsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   dayOffs?: Prisma.DayOffCreateNestedManyWithoutUserInput
+  assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput
 }
 
 export type UserUncheckedCreateWithoutApprovedDayOffsInput = {
@@ -656,6 +682,7 @@ export type UserUncheckedCreateWithoutApprovedDayOffsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   dayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutUserInput
+  assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput
 }
 
 export type UserCreateOrConnectWithoutApprovedDayOffsInput = {
@@ -688,6 +715,7 @@ export type UserUpdateWithoutDayOffsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   approvedDayOffs?: Prisma.DayOffUpdateManyWithoutApprovedByNestedInput
+  assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDayOffsInput = {
@@ -704,6 +732,7 @@ export type UserUncheckedUpdateWithoutDayOffsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   approvedDayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutApprovedByNestedInput
+  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput
 }
 
 export type UserUpsertWithoutApprovedDayOffsInput = {
@@ -731,6 +760,7 @@ export type UserUpdateWithoutApprovedDayOffsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOffs?: Prisma.DayOffUpdateManyWithoutUserNestedInput
+  assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovedDayOffsInput = {
@@ -747,6 +777,91 @@ export type UserUncheckedUpdateWithoutApprovedDayOffsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutUserNestedInput
+  assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput
+}
+
+export type UserCreateWithoutAssignedTasksInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phone: string
+  role?: $Enums.UserRole
+  paidDaysOff?: number
+  sickDaysOff?: number
+  personalDaysOff?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dayOffs?: Prisma.DayOffCreateNestedManyWithoutUserInput
+  approvedDayOffs?: Prisma.DayOffCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserUncheckedCreateWithoutAssignedTasksInput = {
+  id?: string
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phone: string
+  role?: $Enums.UserRole
+  paidDaysOff?: number
+  sickDaysOff?: number
+  personalDaysOff?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutUserInput
+  approvedDayOffs?: Prisma.DayOffUncheckedCreateNestedManyWithoutApprovedByInput
+}
+
+export type UserCreateOrConnectWithoutAssignedTasksInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
+}
+
+export type UserUpsertWithoutAssignedTasksInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTasksInput, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTasksInput, Prisma.UserUncheckedCreateWithoutAssignedTasksInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTasksInput, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>
+}
+
+export type UserUpdateWithoutAssignedTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  paidDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  sickDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  personalDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dayOffs?: Prisma.DayOffUpdateManyWithoutUserNestedInput
+  approvedDayOffs?: Prisma.DayOffUpdateManyWithoutApprovedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssignedTasksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  paidDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  sickDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  personalDaysOff?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutUserNestedInput
+  approvedDayOffs?: Prisma.DayOffUncheckedUpdateManyWithoutApprovedByNestedInput
 }
 
 
@@ -757,11 +872,13 @@ export type UserUncheckedUpdateWithoutApprovedDayOffsInput = {
 export type UserCountOutputType = {
   dayOffs: number
   approvedDayOffs: number
+  assignedTasks: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dayOffs?: boolean | UserCountOutputTypeCountDayOffsArgs
   approvedDayOffs?: boolean | UserCountOutputTypeCountApprovedDayOffsArgs
+  assignedTasks?: boolean | UserCountOutputTypeCountAssignedTasksArgs
 }
 
 /**
@@ -788,6 +905,13 @@ export type UserCountOutputTypeCountApprovedDayOffsArgs<ExtArgs extends runtime.
   where?: Prisma.DayOffWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssignedTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -804,6 +928,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   dayOffs?: boolean | Prisma.User$dayOffsArgs<ExtArgs>
   approvedDayOffs?: boolean | Prisma.User$approvedDayOffsArgs<ExtArgs>
+  assignedTasks?: boolean | Prisma.User$assignedTasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -856,6 +981,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dayOffs?: boolean | Prisma.User$dayOffsArgs<ExtArgs>
   approvedDayOffs?: boolean | Prisma.User$approvedDayOffsArgs<ExtArgs>
+  assignedTasks?: boolean | Prisma.User$assignedTasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -866,6 +992,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     dayOffs: Prisma.$DayOffPayload<ExtArgs>[]
     approvedDayOffs: Prisma.$DayOffPayload<ExtArgs>[]
+    assignedTasks: Prisma.$TaskPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1276,6 +1403,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   dayOffs<T extends Prisma.User$dayOffsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dayOffsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DayOffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   approvedDayOffs<T extends Prisma.User$approvedDayOffsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approvedDayOffsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DayOffPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedTasks<T extends Prisma.User$assignedTasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedTasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1750,6 +1878,30 @@ export type User$approvedDayOffsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.DayOffScalarFieldEnum | Prisma.DayOffScalarFieldEnum[]
+}
+
+/**
+ * User.assignedTasks
+ */
+export type User$assignedTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Task
+   */
+  select?: Prisma.TaskSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Task
+   */
+  omit?: Prisma.TaskOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TaskInclude<ExtArgs> | null
+  where?: Prisma.TaskWhereInput
+  orderBy?: Prisma.TaskOrderByWithRelationInput | Prisma.TaskOrderByWithRelationInput[]
+  cursor?: Prisma.TaskWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaskScalarFieldEnum | Prisma.TaskScalarFieldEnum[]
 }
 
 /**

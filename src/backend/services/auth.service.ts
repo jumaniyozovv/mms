@@ -23,6 +23,7 @@ import type {
   JwtPayload,
   LoginCredentials,
   ChangePasswordInput,
+  RegisterInput,
 } from "@/backend/types/auth.types";
 import type { User } from "@/app/generated/prisma/client";
 
@@ -37,13 +38,6 @@ function toAuthUser(user: User): AuthUser {
   };
 }
 
-export interface RegisterInput {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phone:string;
-}
 
 export async function canRegister(): Promise<boolean> {
   return true;

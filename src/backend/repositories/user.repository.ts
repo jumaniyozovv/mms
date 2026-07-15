@@ -1,6 +1,7 @@
 import { prisma } from "@/backend/lib/prisma";
 import type { Prisma, User } from "@/app/generated/prisma/client";
-import type { UserListFilters } from "@/backend/types/user.types";
+import {  UserCreateInput, UserUpdateInput } from "@/app/generated/prisma/models";
+import {  UserListFilters } from "../types/user.types";
 
 export async function findUserByEmail(email: string): Promise<User | null> {
   return prisma.user.findUnique({
@@ -24,17 +25,7 @@ export async function updateUserPassword(
   });
 }
 
-export async function createUser(data: {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  role: "ADMIN" | "MANAGER" | "USER";
-  paidDaysOff?: number;
-  sickDaysOff?: number;
-  personalDaysOff?: number;
-}): Promise<User> {
+export async function createUser(data: UserCreateInput): Promise<User> {
   return prisma.user.create({
     data: {
       email: data.email,
@@ -90,7 +81,7 @@ export async function findAllUsersWithLimits() {
 
 export async function updateUser(
   id: string,
-  data: { firstName: string; lastName: string; phone?: string; role: "ADMIN" | "MANAGER" | "USER" }
+  data: UserUpdateInput
 ): Promise<User> {
   return prisma.user.update({
     where: { id },

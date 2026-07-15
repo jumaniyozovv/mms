@@ -1,6 +1,7 @@
  import { NextResponse } from "next/server";                                                                 
-  import type { NextRequest } from "next/server";
-                                                                                                              
+  import type { NextRequest } from "next/server"; 
+  import { menuItems } from "@/lib/menu";                                                       
+import { UserRole } from "./app/generated/prisma/enums";
   const PUBLIC_PATHS = [               
     "/login",
     "/register",
@@ -10,8 +11,7 @@
     "/api/auth/refresh",
   ];
   const AUTH_PATHS = ["/login", "/register"];
-
-  function decodeJwtPayload(token: string): { exp?: number } | null {
+  function decodeJwtPayload(token: string): { exp?: number; role?:UserRole} | null {
     try {
       const parts = token.split(".");
       if (parts.length !== 3) return null;
@@ -55,6 +55,20 @@
     if (isAuthPath && isAccessTokenValid) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
+
+  const matchedItem =
+  menuItems
+    .flatMap((i) => i.subitems ?? [])
+    .find((s) => pathname.startsWith(s.path)) ??
+  menuItems.find((i) => pathname.startsWith(i.path));
+    const role = accessToken? decodeJwtPayload(accessToken)?.role:null
+const hasAccess =
+  !matchedItem?.roles?.length || // ✅ allow if roles is empty
+  matchedItem.roles.includes(role as UserRole);
+
+if (role && matchedItem && !hasAccess) {
+  return NextResponse.redirect(new URL("/unauthorized", request.url));
+}
 
     return NextResponse.next();
   }

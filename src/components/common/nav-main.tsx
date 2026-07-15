@@ -1,20 +1,46 @@
 import { usePathname } from "next/navigation";
-import { SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "../ui/sidebar";
-import { menuItems, SubMenuItem } from "@/lib/menu";
+import {
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "../ui/sidebar";
+import { SubMenuItem } from "@/lib/menu";
 import Link from "next/link";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { useAuth } from "@/shared/providers/AuthProvider";
+import { useMemo } from "react";
+import { getVisibleMenu } from "@/lib/filter-menu";
 
 export function SidebarMenuWithSubitems() {
   const pathname = usePathname();
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
+  const { user } = useAuth();
+
+  const visibleMenu = useMemo(
+    () => (user?.role ? getVisibleMenu(user.role) : []),
+    [user?.role],
+  );
 
   return (
     <SidebarMenu>
-      {menuItems.map((item) => {
+      {visibleMenu.map((item) => {
         const isActive =
           pathname === item.path || pathname.startsWith(`${item.path}/`);
 
@@ -25,7 +51,11 @@ export function SidebarMenuWithSubitems() {
         if (!hasSubitems) {
           return (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
+              <SidebarMenuButton
+                asChild
+                isActive={isActive}
+                tooltip={item.title}
+              >
                 <Link href={item.path}>
                   <Icon />
                   <span>{item.title}</span>
@@ -47,7 +77,11 @@ export function SidebarMenuWithSubitems() {
                     <ChevronRight className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent side="right" align="start" className="min-w-48">
+                <DropdownMenuContent
+                  side="right"
+                  align="start"
+                  className="min-w-48"
+                >
                   <DropdownMenuLabel>{item.title}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {item.subitems?.map((sub: SubMenuItem) => {
@@ -60,7 +94,7 @@ export function SidebarMenuWithSubitems() {
                           href={sub.path}
                           className={cn(
                             "flex items-center gap-2 cursor-pointer",
-                            isSubActive && "bg-accent"
+                            isSubActive && "bg-accent",
                           )}
                         >
                           <SubIcon className="h-4 w-4" />
